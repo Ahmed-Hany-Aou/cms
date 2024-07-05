@@ -2,7 +2,7 @@
 $connection=mysqli_connect('localhost','root','','cms');
 
 
-if($connection){
+/*if($connection){
     echo'we are connected';
 
 
@@ -10,7 +10,7 @@ if($connection){
     echo 'maybe we are notnot connected';
 }
 
-
+*/
 
 
 
