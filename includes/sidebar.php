@@ -36,7 +36,7 @@
             <div class="well">
             <?php 
                 
-                $query='select * from cateogries';
+                $query='select * from categories';
                 $select_cateogries_sidebar =mysqli_query($connection,$query);
 
                 
