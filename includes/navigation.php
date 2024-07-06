@@ -18,7 +18,7 @@
 
                 <?php 
                 
-                $query='select * from categories';
+                $query='select * from categories LIMIT 5';
                 $select_all_cateogries_query =mysqli_query($connection,$query);
                 while($row=mysqli_fetch_assoc($select_all_cateogries_query)){
                     $cat_titlle=$row['cat_title'];
@@ -28,7 +28,9 @@
                 
                 
                 ?>
-
+                                                <li>
+                            <a href="admin/index.php">Admin</a>
+                        </li>
             
 
            <!--
