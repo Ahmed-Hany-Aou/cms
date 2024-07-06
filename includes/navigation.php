@@ -18,7 +18,7 @@
 
                 <?php 
                 
-                $query='select * from cateogries';
+                $query='select * from categories';
                 $select_all_cateogries_query =mysqli_query($connection,$query);
                 while($row=mysqli_fetch_assoc($select_all_cateogries_query)){
                     $cat_titlle=$row['cat_title'];
