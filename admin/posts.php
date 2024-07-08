@@ -38,8 +38,8 @@
                                 break;
 
 
-                                case '100';
-                                echo 'nice 100';
+                                case 'delete_post';
+                                include  "post.php";
                                 break;
 
 

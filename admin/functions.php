@@ -63,6 +63,18 @@ function deleteCategories(){
 }
 
 
+function deleteposts(){
+    global $connection;
+    if(isset($_GET['delete'])){
+        $the_post_id=$_GET['delete'];
+        $query="delete from posts where post_id={$the_post_id}";
+        $delete_query=mysqli_query($connection,$query);
+        header("Location: posts.php");
+    }
+}
+
+
+
 
 
 

@@ -44,16 +44,21 @@
                         echo "<td>$post_tags</td>";                                                                       
                        echo "<td>$post_comment_count</td>";
                         echo "<td>$post_date</td>";
+                       echo "<td><a href='posts.php?delete={$post_id}'>Delete<a/></td>";
+
                         echo "</tr>";
                 
                 
                 }
-                                
-                                
-                                
-                                
                                 ?>
 
+            <!-- if (isset($_GET['delete'])) {
+    ...
+}
+-->
+<?php 
+deleteposts();
+?>
 
                                     <td>10</td>
                                     <td>hany</td>
