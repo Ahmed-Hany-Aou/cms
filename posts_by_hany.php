@@ -62,10 +62,27 @@
             <div class="well">
                 <h4>Leave a Comment:</h4>
                 <form role="form">
+
+                <div class="form-group">
+                    <label for="Author">Author</label>
+                       <input type="text" class="form-control" name="comment_author" placeholder="Enter your name">
+                       </div>
+
+
+                       <div class="form-group">
+                    <label for="Author">Email</label>
+                       <input type= "email" class="form-control" name="comment_email" placeholder="Enter your Email">
+</div>                                                                          
+
+
+
+
+
                     <div class="form-group">
-                        <textarea class="form-control" rows="3"></textarea>
+                    <label for="comment">Your Comment</label>
+                        <textarea class="form-control" rows="3" placeholder="Enter your comment"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" name="create_comment" class="btn btn-primary">Submit</button>
                 </form>
             </div>
 
