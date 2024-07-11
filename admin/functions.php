@@ -1,5 +1,13 @@
 <?php 
 
+function confirm_Connection($result){
+    global $connection;
+    if(!$result){
+        
+       die("QUERY FAILED" . mysqli_error($connection));
+    }
+}
+
 function insert_categories(){
     global $connection;
 
@@ -53,6 +61,18 @@ function deleteCategories(){
         header("Location: categories.php");
     }
 }
+
+
+function deleteposts(){
+    global $connection;
+    if(isset($_GET['delete'])){
+        $the_post_id=$_GET['delete'];
+        $query="delete from posts where post_id={$the_post_id}";
+        $delete_query=mysqli_query($connection,$query);
+        header("Location: posts.php");
+    }
+}
+
 
 
 
