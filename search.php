@@ -42,6 +42,26 @@
                     $post_date = $row['post_date'];
                     $post_image = $row['post_image'];
                     $post_content =substr( $row['post_content'],0,50);
+                    $post_status = $row['post_status'];
+
+                    if($post_status !== 'published'){
+                        echo "<h2 class='text-center' style='color: red; text-align: center; font-weight: bold;'>
+                        🚫 This post is not published yet.
+                        </h2>
+                        <p class='text-center' style='color: grey; text-align: center;'>
+                        Please <a href='http://localhost/dashboard/demo/CMS_TEMPLATE/admin/posts.php?source=edit_post&p_id=$post_id' style='color: blue;'>edit the post</a> for more details. <br>
+                        <strong>Post ID:</strong> $post_id
+                        </p>";
+                        
+
+                        //href="posts_by_hany.php?p_id
+
+
+                    }else{
+
+
+
+
                     ?>
                     <!-- Displaying the Post -->
                     <h1 class="page-header">
@@ -75,7 +95,7 @@
                     <hr>
                     <?php
                 }
-            }
+            }}
             ?>
 
             <!-- Pager -->
@@ -87,7 +107,10 @@
                     <a href="#">Newer &rarr;</a>
                 </li>
             </ul>
+
         </div>
+
+        
         <!-- Blog Sidebar Widgets Column -->
         <?php include "includes/sidebar.php"; ?>
     </div>
