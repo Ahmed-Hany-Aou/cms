@@ -1,6 +1,7 @@
 <?php include "includes/db.php"; ?>
 <?php include "includes/header.php"; ?>
 <?php include "includes/navigation.php"; ?>
+<?php include "includes/functions.php"; ?>
 
 <!-- Page Content -->
 <div class="container">
@@ -8,8 +9,6 @@
         <!-- Blog Post Content Column -->
         <div class="col-md-8">
             <?php
-            global $connection;
-
             if (isset($_GET['p_id'])) {
                 $post_id = $_GET['p_id'];
                 $query = "SELECT * FROM posts WHERE post_id = $post_id";
@@ -39,37 +38,13 @@
                     <hr>
                     <!-- Post Content -->
                     <p class="lead"><?php echo $post_content; ?></p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut, tenetur natus doloremque laborum quos iste ipsum rerum obcaecati impedit odit illo dolorum ab tempora nihil dicta earum fugiat. Temporibus, voluptatibus.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, doloribus, dolorem iusto blanditiis unde eius illum consequuntur neque dicta incidunt ullam ea hic porro optio ratione repellat perspiciatis. Enim, iure!</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error, nostrum, aliquid, animi, ut quas placeat totam sunt tempora commodi nihil ullam alias modi dicta saepe minima ab quo voluptatem obcaecati?</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione tempore quidem voluptates cupiditate voluptas illo saepe quaerat numquam recusandae? Qui, necessitatibus, est!</p>
-                    <hr>
             <?php
                 }
             }
             ?>
+
             <!-- Blog Comments -->
-            <?php
-            if (isset($_POST['create_comment'])) {
-                $the_post_id = $_GET['p_id'];
-                $comment_author = $_POST['comment_author'];
-                $comment_email = $_POST['comment_email'];
-                $comment_content = $_POST['comment_content'];
-                echo $comment_author;
-
-                // Construct the query
-                $query = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_status, comment_date) ";
-                $query .= "VALUES ($the_post_id, '$comment_author', '$comment_email', '$comment_content', 'unapproved', now())";
-
-                // Execute the query
-                $insert_comments_query = mysqli_query($connection, $query);
-
-                // Check if the query was successful
-                if (!$insert_comments_query) {
-                    die("Query failed: " . mysqli_error($connection));
-                }
-            }
-            ?>
+            
 
             <!-- Comments Form -->
             <div class="well">
@@ -91,22 +66,50 @@
                 </form>
             </div>
 
-            <hr>
-<?php include  "includes/comments.php"; ?>
-                </div>
-            </div>
+            <?php
+            if (isset($_POST['create_comment'])) {
+                $the_post_id = $_GET['p_id'];
+                $comment_author = $_POST['comment_author'];
+                $comment_email = $_POST['comment_email'];
+                $comment_content = $_POST['comment_content'];
 
+                // Construct the query
+                $query = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_status, comment_date) ";
+                $query .= "VALUES ($the_post_id, '$comment_author', '$comment_email', '$comment_content', 'unapproved', now())";
+
+                // Execute the query
+                $insert_comments_query = mysqli_query($connection, $query);
+
+                // Check if the query was successful
+                confirm_Connection($insert_comments_query);
+
+
+                $query= "update posts set post_comment_count = post_comment_count +1 where post_id = $the_post_id";
+                $update_comment_count = mysqli_query($connection, $query);
+            
+
+            }
+
+
+            // Display comments
+            if (isset($post_id)) {
+                $the_post_id = $post_id;
+                include "includes/comments.php";
+            }
+            ?>
+
+
+
+            <hr>
         </div>
 
-        <!-- Blog Sidebar Widgets Column -->
-        
-            <?php include "includes/sidebar.php"; ?>
-        
-    </div>
-    <!-- /.row -->
-    <hr>
-    <!-- Footer -->
-    <?php include "includes/footer.php"; ?>
+
+<!-- Blog Sidebar Widgets Column -->
+<?php include "includes/sidebar.php"; ?>
+<!-- /.row -->
+<hr>
+<!-- Footer -->
+<?php include "includes/footer.php"; ?>
 </div>
 <!-- /.container -->
 
