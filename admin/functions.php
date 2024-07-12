@@ -1,12 +1,12 @@
 <?php 
 
-function confirm_Connection($result){
+function confirm_Connection($result) {
     global $connection;
-    if(!$result){
-        
-       die("QUERY FAILED" . mysqli_error($connection));
+    if (!$result) {
+        die("QUERY FAILED" . mysqli_error($connection));
     }
 }
+
 
 function insert_categories(){
     global $connection;
@@ -74,7 +74,32 @@ function deleteposts(){
 }
 
 
+function deleteComment($comment_id) {
+    global $connection;
+    $query = "DELETE FROM comments WHERE comment_id = {$comment_id}";
+    $delete_comment_query = mysqli_query($connection, $query);
+    confirm_Connection($delete_comment_query);
+    header("Location: comments.php");
+    exit();
+}
 
+function approveComment($comment_id) {
+    global $connection;
+    $query = "UPDATE comments SET comment_status = 'approved' WHERE comment_id = {$comment_id}";
+    $approve_comment_query = mysqli_query($connection, $query);
+    confirm_Connection($approve_comment_query);
+    header("Location: comments.php");
+    exit();
+}
+
+function unapproveComment($comment_id) {
+    global $connection;
+    $query = "UPDATE comments SET comment_status = 'unapproved' WHERE comment_id = {$comment_id}";
+    $unapprove_comment_query = mysqli_query($connection, $query);
+    confirm_Connection($unapprove_comment_query);
+    header("Location: comments.php");
+    exit();
+}
 
 
 
