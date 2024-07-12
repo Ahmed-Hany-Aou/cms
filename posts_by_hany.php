@@ -35,7 +35,7 @@
                     <p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date; ?></p>
                     <hr>
                     <!-- Preview Image -->
-                    <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+                    <img class="img-responsive" src="hanyimage/<?php echo $post_image; ?>" alt="Hany's Image" style="width: 200px; height: 300;">
                     <hr>
                     <!-- Post Content -->
                     <p class="lead"><?php echo $post_content; ?></p>

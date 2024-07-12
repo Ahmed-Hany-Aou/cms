@@ -3,8 +3,8 @@
         <tr>
             <th>id</th>
             <th>Author</th>
-            <th>Comment</th>
             <th>Email</th>
+            <th>Comment</th>
             <th>Status</th>
             <th>IN Response TO</th>
             <th>Date</th>
