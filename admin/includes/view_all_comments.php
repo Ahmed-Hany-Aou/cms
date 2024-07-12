@@ -3,9 +3,10 @@
         <tr>
             <th>id</th>
             <th>Author</th>
+            <th>Comment</th>
             <th>Email</th>
-            <th>Content</th>
             <th>Status</th>
+            <th>IN Response TO</th>
             <th>Date</th>
             <th>Approved</th>
             <th>UN Approved</th>
@@ -19,6 +20,7 @@
 
         while ($row = mysqli_fetch_assoc($select_comments)) {
             $comment_id = $row['comment_id'];
+            $comment_post_id = $row['comment_post_id'];
             $comment_author = $row['comment_author'];
             $comment_email = $row['comment_email'];
             $comment_content = $row['comment_content'];
@@ -38,9 +40,19 @@
             echo "<td>$comment_email</td>";
             echo "<td>$comment_content</td>";
             echo "<td>$comment_status</td>";
-            //echo "<td><img width='100' src='../hanyimage/$post_image' alt='image' /></td>";
-           // echo "<td>$post_tags</td>";                                                                       
-           // echo "<td>$post_comment_count</td>";
+
+            $query = "select * from posts where post_id= {$comment_post_id}";
+            $select_post_id_query = mysqli_query($connection, $query);
+            while ($row = mysqli_fetch_assoc($select_post_id_query)) {
+                $post_id = $row['post_id'];
+                $post_title = $row['post_title'];
+                echo "<td><a href='../posts_by_hany.php?p_id=$post_id'>$post_title</a></td>";
+
+            }
+
+
+
+            
             echo "<td>$comment_date</td>";
             echo "<td><a href='posts.php?source=edit_post&p_id='>Approve</a></td>";
             echo "<td><a href='posts.php?delete='>UN Approved</a></td>";
