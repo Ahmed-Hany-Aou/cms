@@ -9,8 +9,15 @@ if (isset($_POST['create_user'])) {
 
     // Echo the username
     echo "Username: " . $username;
+    $query = "INSERT INTO users (user_firstname, user_lastname, user_role, username, user_email, user_password) ";
+$query .= "VALUES ('{$user_firstname}', '{$user_lastname}', '{$user_role}', '{$username}', '{$user_email}', '{$user_password}')";
+         $create_user_query= mysqli_query($connection,$query);
+
+       confirm_Connection($create_user_query);
+
 }
 ?>
+
 
 <form action="" method="post" enctype="multipart/form-data">
     <div class="form-group">
@@ -44,7 +51,7 @@ if (isset($_POST['create_user'])) {
 
     <div class="form-group">
         <label for="category">Password</label>
-        <input type="text" class="form-control" name="user_password">
+        <input type="password" class="form-control" name="user_password">
     </div>
 
     <div class="form-group">
