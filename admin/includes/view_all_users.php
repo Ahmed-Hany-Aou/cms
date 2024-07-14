@@ -69,7 +69,7 @@ if (isset($_GET['delete'])) {
 
 if (isset($_GET['change_to_admin'])) {
     $user_id_to_admin = $_GET['change_to_admin'];
-    $query = "UPDATE users SET user_role = 'Admin' WHERE user_id = {$user_id_to_admin}";
+    $query = "UPDATE users SET user_role = 'admin' WHERE user_id = {$user_id_to_admin}";
     $change_admin_query = mysqli_query($connection, $query);
     if (!$change_admin_query) {
         die("Query failed: " . mysqli_error($connection));
@@ -79,7 +79,7 @@ if (isset($_GET['change_to_admin'])) {
 
 if (isset($_GET['change_to_sub'])) {
     $user_id_to_sub = $_GET['change_to_sub'];
-    $query = "UPDATE users SET user_role = 'Subscriber' WHERE user_id = {$user_id_to_sub}";
+    $query = "UPDATE users SET user_role = 'subscriber' WHERE user_id = {$user_id_to_sub}";
     $change_sub_query = mysqli_query($connection, $query);
     if (!$change_sub_query) {
         die("Query failed: " . mysqli_error($connection));
