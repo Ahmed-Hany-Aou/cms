@@ -7,106 +7,108 @@ if(isset($_SESSION['username'])){
     while($row = mysqli_fetch_assoc($select_user_profile_query)){
         $user_id = $row['user_id'];
         $username = $row['username'];
-        $user_password= $row ['user_password'];
+        $user_password = $row['user_password'];
         $user_firstname = $row['user_firstname'];
         $user_lastname = $row['user_lastname'];
         $user_email = $row['user_email'];
         $user_image = $row['user_image'];
-        $user_role=$row['user_role'];
-
+        $user_role = $row['user_role'];
     }
-
 }
-
-
-
-
-
-
-
 ?>
 
+<?php
+if (isset($_POST['edit_user'])) {
+    $user_firstname = $_POST['user_firstname'];
+    $user_lastname = $_POST['user_lastname'];
+    $user_role = $_POST['user_role'];
+    $username = $_POST['username'];
+    $user_email = $_POST['user_email'];
+    $user_password = $_POST['user_password'];
 
-    <div id="wrapper">
+    // Update query
+    $query = "UPDATE users SET ";
+    $query .= "user_firstname = '{$user_firstname}', ";
+    $query .= "user_lastname = '{$user_lastname}', ";
+    $query .= "user_role = '{$user_role}', ";
+    $query .= "username = '{$username}', ";
+    $query .= "user_email = '{$user_email}', ";
+    $query .= "user_password = '{$user_password}' ";
+    $query .= "WHERE username = '{$_SESSION['username']}'"; // Update using session username
+
+    $update_user = mysqli_query($connection, $query);
+    confirm_Connection($update_user);
+
+    // Update session username if changed
+    if ($_SESSION['username'] != $username) {
+        $_SESSION['username'] = $username;
+    }
+}
+?>
+
+<div id="wrapper">
  <!-- Navigation -->
 <?php include "includes/admin_navigation.php"?>
 
-      
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">
+                        Welcome to admin
+                        <small> Author</small>
+                    </h1>
 
-        <div id="page-wrapper">
-            <div class="container-fluid">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="category">First Name</label>
+                            <input value="<?php echo isset($user_firstname) ? $user_firstname : ''; ?>" type="text" class="form-control" name="user_firstname">
+                        </div>
 
-                <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="category">Last Name</label>
+                            <input value="<?php echo isset($user_lastname) ? $user_lastname : ''; ?>" type="text" class="form-control" name="user_lastname">
+                        </div>
 
-                 
-                        <h1 class="page-header">
-                            Welcome to admin
-                            <small> Author</small>
-                            </h1>
+                        <div class="form-group">
+                            <label for="category">Username</label>
+                            <input value="<?php echo isset($username) ? $username : ''; ?>" type="text" class="form-control" name="username">
+                        </div>
 
-                            <form action="" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="category">First Name</label>
-        <input value="<?php echo isset($user_firstname) ? $user_firstname : ''; ?>" type="text" class="form-control" name="user_firstname">
-    </div>
+                        <div class="form-group">
+                            <label for="category">Role</label>
+                            <select class="form-control" name="user_role">
+                                <option value="<?php echo isset($user_role) ? $user_role : 'select_option'; ?>"><?php echo isset($user_role) ? ucfirst($user_role) : 'Select Option'; ?></option>
+                                <?php
+                                if (isset($user_role) && $user_role == 'admin') {
+                                    echo "<option value='subscriber'>Subscriber</option>";
+                                } else {
+                                    echo "<option value='admin'>Admin</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-    <div class="form-group">
-        <label for="category">Last Name</label>
-        <input value="<?php echo isset($user_lastname) ? $user_lastname : ''; ?>" type="text" class="form-control" name="user_lastname">
-    </div>
+                        <div class="form-group">
+                            <label for="category">Email</label>
+                            <input value="<?php echo isset($user_email) ? $user_email : ''; ?>" type="text" class="form-control" name="user_email">
+                        </div>
 
-    <div class="form-group">
-        <label for="category">Username</label>
-        <input value="<?php echo isset($username) ? $username : ''; ?>" type="text" class="form-control" name="username">
-    </div>
+                        <div class="form-group">
+                            <label for="category">Password</label>
+                            <input value="<?php echo isset($user_password) ? $user_password : ''; ?>" type="text" class="form-control" name="user_password">
+                        </div>
 
-    <div class="form-group">
-        <label for="category">Role</label>
-        <select class="form-control" name="user_role">
-            <option value="<?php echo isset($user_role) ? $user_role : 'select_option'; ?>"><?php echo isset($user_role) ? ucfirst($user_role) : 'Select Option'; ?></option>
-            <?php
-            if (isset($user_role) && $user_role == 'admin') {
-                echo "<option value='subscriber'>Subscriber</option>";
-            } else {
-                echo "<option value='admin'>Admin</option>";
-            }
-            ?>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="category">Email</label>
-        <input value="<?php echo isset($user_email) ? $user_email : ''; ?>" type="text" class="form-control" name="user_email">
-    </div>
-
-    <div class="form-group">
-        <label for="category">Password</label>
-        <input value="<?php echo isset($user_password) ? $user_password : ''; ?>" type="text" class="form-control" name="user_password">
-    </div>
-
-    <div class="form-group">
-        <input class="btn btn-primary" type="submit" name="edit_user" value="Update Profile">
-    </div>
-</form>
-                            
-        
-                            
-                            
-                            
-
-
-
-
-
-     </div>
+                        <div class="form-group">
+                            <input class="btn btn-primary" type="submit" name="edit_user" value="Update Profile">
+                        </div>
+                    </form>
+                </div>
                 <!-- /.row -->
-
             </div>
             <!-- /.container-fluid -->
-
         </div>
         <!-- /#page-wrapper -->
-
     <?php include('includes/admin_footer.php'); ?>
+</div>
