@@ -1,5 +1,4 @@
 <?php include "includes/admin_header.php"; ?>
-<?php //session_start(); ?> <!-- Uncommented to start the session -->
 
 <div id="wrapper">
     <!-- Navigation -->
@@ -19,7 +18,7 @@
             <?php 
             $query = "SELECT * FROM posts";
             $select_all_posts_query = mysqli_query($connection, $query);
-            $post_count = mysqli_num_rows($select_all_posts_query); // Correct variable name used here
+            $post_count = mysqli_num_rows($select_all_posts_query);
             ?>
             <?php
              $query = "SELECT * FROM comments";
@@ -31,20 +30,13 @@
             $query = "SELECT * FROM users";
              $select_all_users_query = mysqli_query($connection, $query);
              $user_count = mysqli_num_rows($select_all_users_query);
-            
             ?>
 
             <?php 
-            
             $query = "SELECT * FROM categories";
              $select_all_categories_query = mysqli_query($connection, $query);
              $category_count = mysqli_num_rows($select_all_categories_query);
-            
-            
             ?>
-
-
-
 
             <!-- /.row -->
             <div class="row">
@@ -56,7 +48,7 @@
                                     <i class="fa fa-file-text fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class='huge'><?php echo $post_count; ?></div> <!-- Correct variable name used here -->
+                                    <div class='huge'><?php echo $post_count; ?></div>
                                     <div>Posts</div>
                                 </div>
                             </div>
@@ -101,12 +93,11 @@
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class='huge'><?php echo  $user_count ?></div>
-
                                     <div>Users</div>
                                 </div>
                             </div>
                         </div>
-                        <a href="user.php">
+                        <a href="users.php">
                             <div class="panel-footer">
                                 <span class="pull-left">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -141,8 +132,36 @@
             <!-- /.row -->
         </div>
         <!-- /.container-fluid -->
+
+        <div class="row">
+            <div id="columnchart_material" style="width: 100%; height: 500px;"></div>
+            <script type="text/javascript">
+                google.charts.load('current', {'packages':['bar']});
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Data', 'Count'],
+                        ['Posts', <?php echo $post_count; ?>],
+                        ['Comments', <?php echo $comment_count; ?>],
+                        ['Users', <?php echo $user_count; ?>],
+                        ['Categories', <?php echo $category_count; ?>]
+                    ]);
+
+                    var options = {
+                        chart: {
+                            title: 'Website Data',
+                            subtitle: 'Posts, Comments, Users, and Categories',
+                        }
+                    };
+
+                    var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+                    chart.draw(data, google.charts.Bar.convertOptions(options));
+                }
+            </script>
+        </div>
     </div>
     <!-- /#page-wrapper -->
-
     <?php include "includes/admin_footer.php"; ?>
 </div>
