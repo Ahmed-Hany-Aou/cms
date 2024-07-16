@@ -1,5 +1,5 @@
 <?php include "includes/admin_header.php"; ?>
-<?php session_start(); ?> <!-- Uncommented to start the session -->
+<?php //session_start(); ?> <!-- Uncommented to start the session -->
 
 <div id="wrapper">
     <!-- Navigation -->
@@ -21,6 +21,30 @@
             $select_all_posts_query = mysqli_query($connection, $query);
             $post_count = mysqli_num_rows($select_all_posts_query); // Correct variable name used here
             ?>
+            <?php
+             $query = "SELECT * FROM comments";
+             $select_all_comments_query = mysqli_query($connection, $query);
+             $comment_count = mysqli_num_rows($select_all_comments_query);
+            ?>
+
+            <?php 
+            $query = "SELECT * FROM users";
+             $select_all_users_query = mysqli_query($connection, $query);
+             $user_count = mysqli_num_rows($select_all_users_query);
+            
+            ?>
+
+            <?php 
+            
+            $query = "SELECT * FROM categories";
+             $select_all_categories_query = mysqli_query($connection, $query);
+             $category_count = mysqli_num_rows($select_all_categories_query);
+            
+            
+            ?>
+
+
+
 
             <!-- /.row -->
             <div class="row">
@@ -54,7 +78,7 @@
                                     <i class="fa fa-comments fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class='huge'>23</div>
+                                    <div class='huge'><?php echo $comment_count ?></div>
                                     <div>Comments</div>
                                 </div>
                             </div>
@@ -76,12 +100,13 @@
                                     <i class="fa fa-user fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class='huge'>23</div>
+                                    <div class='huge'><?php echo  $user_count ?></div>
+
                                     <div>Users</div>
                                 </div>
                             </div>
                         </div>
-                        <a href="users.php">
+                        <a href="user.php">
                             <div class="panel-footer">
                                 <span class="pull-left">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -98,7 +123,7 @@
                                     <i class="fa fa-list fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class='huge'>13</div>
+                                    <div class='huge'> <?php echo $category_count ?></div>
                                     <div>Categories</div>
                                 </div>
                             </div>
