@@ -134,7 +134,7 @@
         <!-- /.container-fluid -->
 
         <div class="row">
-            <div id="columnchart_material" style="width: 100%; height: 500px;"></div>
+            <div id="columnchart_material" style="width: 'auto'; height: 500px;"></div>
             <script type="text/javascript">
                 google.charts.load('current', {'packages':['bar']});
                 google.charts.setOnLoadCallback(drawChart);

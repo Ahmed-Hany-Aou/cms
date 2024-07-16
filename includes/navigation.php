@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -24,13 +25,16 @@
                     $cat_titlle=$row['cat_title'];
                 echo "<li><a href='#'>{$cat_titlle}</a></li>";
                 }
-                
-                
-                
                 ?>
-                                                <li>
-                            <a href="admin/index.php">Admin</a>
-                        </li>
+                <?php  
+                if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
+                    echo '<li><a href="admin/index.php">Admin</a></li>';
+                }
+
+                ?>
+
+
+                            
             
 
            <!--
