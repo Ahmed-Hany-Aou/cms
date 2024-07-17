@@ -1,4 +1,5 @@
 <?php include "includes/admin_header.php"; ?>
+<?php include "../includes/dashboard_functions.php"; ?>
 
 <div id="wrapper">
     <!-- Navigation -->
@@ -10,32 +11,16 @@
                 <div class="col-lg-12">  
                     <h1 class="page-header">
                         Welcome to admin 
-                        <small> <?php echo $_SESSION['username']; ?></small>
+                        <small><?php echo $_SESSION['username']; ?></small>
                     </h1>
                 </div>
             </div>
 
             <?php 
-            $query = "SELECT * FROM posts";
-            $select_all_posts_query = mysqli_query($connection, $query);
-            $post_count = mysqli_num_rows($select_all_posts_query);
-            ?>
-            <?php
-             $query = "SELECT * FROM comments";
-             $select_all_comments_query = mysqli_query($connection, $query);
-             $comment_count = mysqli_num_rows($select_all_comments_query);
-            ?>
-
-            <?php 
-            $query = "SELECT * FROM users";
-             $select_all_users_query = mysqli_query($connection, $query);
-             $user_count = mysqli_num_rows($select_all_users_query);
-            ?>
-
-            <?php 
-            $query = "SELECT * FROM categories";
-             $select_all_categories_query = mysqli_query($connection, $query);
-             $category_count = mysqli_num_rows($select_all_categories_query);
+            $post_count = echo_count_post();
+            $comment_count = echo_count_comments();
+            $user_count = echo_count_users();
+            $category_count = echo_count_categories();
             ?>
 
             <!-- /.row -->
@@ -70,7 +55,7 @@
                                     <i class="fa fa-comments fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class='huge'><?php echo $comment_count ?></div>
+                                    <div class='huge'><?php echo $comment_count; ?></div>
                                     <div>Comments</div>
                                 </div>
                             </div>
@@ -92,7 +77,7 @@
                                     <i class="fa fa-user fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class='huge'><?php echo  $user_count ?></div>
+                                    <div class='huge'><?php echo $user_count; ?></div>
                                     <div>Users</div>
                                 </div>
                             </div>
@@ -114,7 +99,7 @@
                                     <i class="fa fa-list fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class='huge'> <?php echo $category_count ?></div>
+                                    <div class='huge'><?php echo $category_count; ?></div>
                                     <div>Categories</div>
                                 </div>
                             </div>
@@ -143,6 +128,7 @@
                     var data = google.visualization.arrayToDataTable([
                         ['Data', 'Count'],
                         ['Posts', <?php echo $post_count; ?>],
+                        ['draft_post',<?php  echo echo_count_draft_post(); ?>], 
                         ['Comments', <?php echo $comment_count; ?>],
                         ['Users', <?php echo $user_count; ?>],
                         ['Categories', <?php echo $category_count; ?>]
