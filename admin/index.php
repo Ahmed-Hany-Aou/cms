@@ -33,7 +33,7 @@
                                     <i class="fa fa-file-text fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class='huge'><?php echo $post_count; ?></div>
+                                    <div class='huge'><?php echo echo_count_post() ?></div>
                                     <div>Posts</div>
                                 </div>
                             </div>
@@ -55,8 +55,8 @@
                                     <i class="fa fa-comments fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class='huge'><?php echo $comment_count; ?></div>
-                                    <div>Comments</div>
+                                    <div class='huge'><?php echo echo_count_All_comments(); ?></div>
+                                    <div>All Comments</div>
                                 </div>
                             </div>
                         </div>
@@ -127,10 +127,12 @@
                 function drawChart() {
                     var data = google.visualization.arrayToDataTable([
                         ['Data', 'Count'],
-                        ['Posts', <?php echo $post_count; ?>],
-                        ['draft_post',<?php  echo echo_count_draft_post(); ?>], 
-                        ['Comments', <?php echo $comment_count; ?>],
-                        ['Users', <?php echo $user_count; ?>],
+                        ['Published Posts', <?php echo echo_count_published_post(); ?>],
+                        ['Pending Posts', <?php echo echo_count_draft_post(); ?>],
+                        ['Approved Comments', <?php echo $comment_count; ?>],
+                        ['Pending Comments', <?php echo echo_count_pending_comments(); ?>],
+                        ['Admin Users', <?php echo echo_count_admin_users(); ?>],
+                        ['Sbscriber Users', <?php echo echo_count_subscriber_users(); ?>],
                         ['Categories', <?php echo $category_count; ?>]
                     ]);
 
