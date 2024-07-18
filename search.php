@@ -91,7 +91,6 @@
                     <img class="img-responsive" src="hanyimage/<?php echo $post_image; ?>" alt="Hany's Image" style="width: 200px; height: 300;">
                     <hr>
                     <p><?php echo $post_content; ?></p>
-                    <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                     <hr>
                     <?php
                 }
