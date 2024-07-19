@@ -22,6 +22,7 @@
 
     <thead>
         <tr>
+            <th><input id="selectAllBoxes" type="checkbox"></th>
             <th>id</th>
             <th>Author</th>
             <th>Title</th>
@@ -51,6 +52,9 @@
             $post_comment_count = $row['post_comment_count'];
             $post_date = $row['post_date'];
             
+          
+     
+
             //move_uploaded_file($post_image_temp, "../hanyimage/$post_image");
             // Fetch the category title
             $category_query = "SELECT * FROM categories WHERE id = {$post_cateogry_id}";
@@ -63,6 +67,10 @@
             }
 
             echo "<tr>";
+            ?>
+            <td><input class='checkbox' type='checkbox' name='checkBoxArray[]' value='<?php echo $post_id ?>'  ></td>
+            
+            <?php
             echo "<td>$post_id</td>";
             echo "<td>$post_author</td>";
             echo "<td>$post_title</td>";
