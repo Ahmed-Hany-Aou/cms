@@ -93,10 +93,25 @@ while ($row = mysqli_fetch_assoc($select_posts_by_Id)) {
         <input type="text" value="<?php echo $post_author; ?>" class="form-control" name="author">
     </div>
 
+
+
     <div class="form-group">
         <label for="post_status">Post Status</label>
-        <input type="text" value="<?php echo $post_status; ?>" class="form-control" name="post_status">
+        <select type="text" value="<?php echo $post_status; ?>" class="form-control" name="post_status">
+        <option value="<?php echo isset($post_status) ? $post_status : 'select_option'; ?>"><?php echo isset($post_status) ? ucfirst($post_status) : 'Select Option'; ?></option>
+            <?php
+            if (isset($post_status) && $post_status == 'published') {
+                echo "<option value='draft'>Draft</option>";
+            } else {
+                echo "<option value='published'>Published</option>";
+            }
+            ?>
+            </select>
     </div>
+
+
+
+
 
     <div class="form-group">
         <label for="post_image">Post Image</label>
