@@ -1,7 +1,7 @@
 <?php
 if (isset($_GET['p_id'])) {
     $p_id = $_GET['p_id'];
-    echo $p_id;
+    
 }
 
 if (isset($_POST['Update_Post'])) {
@@ -35,6 +35,10 @@ if (isset($_POST['Update_Post'])) {
 
     $update_post = mysqli_query($connection, $query);
     confirm_Connection($update_post);
+
+    echo "<p class='bg-success'>post with id:".$p_id." has been updated successfully 
+    <a href='../posts_by_hany.php?p_id={$p_id}'>View Post <a/> OR <a href='posts.php'>Edit More Posts</a> </p>"; 
+
 }
 
 $query = "SELECT * FROM posts WHERE post_id = {$p_id}";
@@ -127,7 +131,7 @@ while ($row = mysqli_fetch_assoc($select_posts_by_Id)) {
 
     <div class="form-group">
         <label for="post_content">Post Content</label>
-        <textarea class="form-control" name="post_content" cols="30" rows="10"><?php echo $post_content; ?></textarea>
+        <textarea class="form-control" name="post_content" id="summernote" cols="30" rows="10"><?php echo $post_content; ?></textarea>
     </div>
 
     <div class="form-group">

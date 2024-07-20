@@ -1,3 +1,5 @@
+
+
 <?php
    
 
@@ -26,6 +28,10 @@
          $create_post_query= mysqli_query($connection,$query);
 
        confirm_Connection($create_post_query);
+       $p_id= mysqli_insert_id($connection);
+
+       echo "<p class='bg-success'>post with id:".$p_id." has been created successfully 
+    <a href='../posts_by_hany.php?p_id={$p_id}'>View Post <a/> OR <a href='posts.php'>Edit More Posts</a> </p>"; 
    }
 
         ?>
@@ -102,9 +108,10 @@
       
 
       <div class="form-group">
-       <label for="category">Post Status</label>
-       <input type="text" class="form-control" name="post_status"> 
-      </div>
+       <select name="post_status" id="">
+        <option value="draft">Select Post Status</option>
+        <option value="published">Published</option>
+        <option value="draft">Draft</option></div>
       
       
       
@@ -119,9 +126,8 @@
       </div>
       
       <div class="form-group">
-         <label for="post_content">Post Content</label>
-         <textarea class="form-control "name="post_content" id="" cols="30" rows="10">
-         </textarea>
+         <label for="summernote">Post Content</label>
+         <textarea class="form-control" name="post_content" id="summernote" cols="30" rows="10"></textarea>
       </div>
       
       

@@ -49,7 +49,7 @@
             <!-- Comments Form -->
             <div class="well">
                 <h4>Leave a Comment:</h4>
-                <form action="" method="post" role="form">
+                <form id="commentForm" action="" method="post" role="form">
                     <div class="form-group">
                         <label for="Author">Author</label>
                         <input type="text" class="form-control" name="comment_author" placeholder="Enter your name">
@@ -73,23 +73,19 @@
                 $comment_email = $_POST['comment_email'];
                 $comment_content = $_POST['comment_content'];
 
-                // Construct the query
-                $query = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_status, comment_date) ";
-                $query .= "VALUES ($the_post_id, '$comment_author', '$comment_email', '$comment_content', 'unapproved', now())";
+                if (!empty($comment_author) && !empty($comment_email) && !empty($comment_content)) {
+                    $query = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_status, comment_date) ";
+                    $query .= "VALUES ($the_post_id, '$comment_author', '$comment_email', '$comment_content', 'unapproved', now())";
+                    $insert_comments_query = mysqli_query($connection, $query);
+                    confirm_Connection($insert_comments_query);
 
-                // Execute the query
-                $insert_comments_query = mysqli_query($connection, $query);
-
-                // Check if the query was successful
-                confirm_Connection($insert_comments_query);
-
-
-                $query= "update posts set post_comment_count = post_comment_count +1 where post_id = $the_post_id";
-                $update_comment_count = mysqli_query($connection, $query);
-            
-
+                    $query = "UPDATE posts SET post_comment_count = post_comment_count + 1 WHERE post_id = $the_post_id";
+                    $update_comment_count = mysqli_query($connection, $query);
+                    confirm_Connection($update_comment_count);
+                } else {
+                    echo "<p class='bg-danger'>Fields cannot be empty</p>"; 
+                }
             }
-
 
             // Display comments
             if (isset($post_id)) {
@@ -97,25 +93,33 @@
                 include "includes/comments.php";
             }
             ?>
-
-
-
             <hr>
         </div>
 
+        <!-- Blog Sidebar Widgets Column -->
+        <?php include "includes/sidebar.php"; ?>
+        <!-- /.row -->
+        <hr>
+        <!-- Footer -->
+        <?php include "includes/footer.php"; ?>
+    </div>
+    <!-- /.container -->
 
-<!-- Blog Sidebar Widgets Column -->
-<?php include "includes/sidebar.php"; ?>
-<!-- /.row -->
-<hr>
-<!-- Footer -->
-<?php include "includes/footer.php"; ?>
-</div>
-<!-- /.container -->
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+    document.getElementById('commentForm').addEventListener('submit', function(event) {
+        var author = document.querySelector('input[name="comment_author"]').value.trim();
+        var email = document.querySelector('input[name="comment_email"]').value.trim();
+        var comment = document.querySelector('textarea[name="comment_content"]').value.trim();
 
-<!-- jQuery -->
-<script src="js/jquery.js"></script>
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
+        if (author === "" || email === "" || comment === "") {
+            alert('All fields are required!');
+            event.preventDefault(); // Prevent the form from being submitted
+        }
+    });
+    </script>
 </body>
 </html>

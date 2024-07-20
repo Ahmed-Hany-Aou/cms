@@ -1,3 +1,4 @@
+
 <?php session_start(); ?>
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -26,10 +27,15 @@
                 echo "<li><a href='#'>{$cat_titlle}</a></li>";
                 }
                 ?>
-                <?php  
+                <?php
+
                 if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
                     echo '<li><a href="admin/index.php">Admin</a></li>';
+                    if (isset($_GET['p_id'])) {
+                        $p_id = $_GET['p_id'];
+                    echo "<li><a href='admin/posts.php?source=edit_post&p_id={$p_id}'>Edit Post</a></li>";
                 }
+            }
 
                 ?>
 
