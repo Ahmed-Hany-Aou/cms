@@ -1,7 +1,6 @@
 <?php
-if (isset($_GET['edit_user'])){
+if (isset($_GET['edit_user'])) {
     $the_user_id = $_GET['edit_user'];
-    echo $the_user_id;
 
     $query = "SELECT * FROM users WHERE user_id = $the_user_id";
     $select_users = mysqli_query($connection, $query);
@@ -14,7 +13,7 @@ if (isset($_GET['edit_user'])){
         $user_email = $row['user_email'];
         $user_image = $row['user_image'];
         $user_role = $row['user_role'];
-        $user_password= $row['user_password'];
+        $user_password = $row['user_password'];
     }
 }
 
@@ -26,15 +25,29 @@ if (isset($_POST['edit_user'])) {
     $user_email = $_POST['user_email'];
     $user_password = $_POST['user_password'];
 
-    // Update query
-    $query = "UPDATE users SET ";
-    $query .= "user_firstname = '{$user_firstname}', ";
-    $query .= "user_lastname = '{$user_lastname}', ";
-    $query .= "user_role = '{$user_role}', ";
-    $query .= "username = '{$username}', ";
-    $query .= "user_email = '{$user_email}', ";
-    $query .= "user_password = '{$user_password}' ";
-    $query .= "WHERE user_id = {$the_user_id}";
+    // Hash the password only if provided
+    if (!empty($user_password)) {
+        $hashed_password = password_hash($user_password, PASSWORD_BCRYPT);
+
+        // Update query with new password
+        $query = "UPDATE users SET ";
+        $query .= "user_firstname = '{$user_firstname}', ";
+        $query .= "user_lastname = '{$user_lastname}', ";
+        $query .= "user_role = '{$user_role}', ";
+        $query .= "username = '{$username}', ";
+        $query .= "user_email = '{$user_email}', ";
+        $query .= "user_password = '{$hashed_password}' ";
+        $query .= "WHERE user_id = {$the_user_id}";
+    } else {
+        // Update query without new password
+        $query = "UPDATE users SET ";
+        $query .= "user_firstname = '{$user_firstname}', ";
+        $query .= "user_lastname = '{$user_lastname}', ";
+        $query .= "user_role = '{$user_role}', ";
+        $query .= "username = '{$username}', ";
+        $query .= "user_email = '{$user_email}' ";
+        $query .= "WHERE user_id = {$the_user_id}";
+    }
 
     $update_user = mysqli_query($connection, $query);
     confirm_Connection($update_user);
@@ -78,7 +91,7 @@ if (isset($_POST['edit_user'])) {
 
     <div class="form-group">
         <label for="category">Password</label>
-        <input value="<?php echo isset($user_password) ? $user_password : ''; ?>" type="text" class="form-control" name="user_password">
+        <input type="password" class="form-control" name="user_password" placeholder="Enter new password if you want to change it">
     </div>
 
     <div class="form-group">

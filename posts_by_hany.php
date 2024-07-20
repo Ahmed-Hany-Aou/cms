@@ -119,6 +119,9 @@
             alert('All fields are required!');
             event.preventDefault(); // Prevent the form from being submitted
         }
+        else{
+            alert ("Comment added successfully and it will be aproved by admin soon");
+        }
     });
     </script>
 </body>
