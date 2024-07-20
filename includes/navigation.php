@@ -43,19 +43,21 @@
                             
             
 
-           <!--
+           
 
                 <li>
-                    <a href="#">About</a>
+                    <a href="./registration.php">Registration</a>
                 </li>
+                <!--
                 <li>
                     <a href="#">Services</a>
                 </li>
                 <li>
                     <a href="#">Contact</a>
                 </li>
-
                 -->
+
+            
 
 
 

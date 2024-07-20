@@ -3,9 +3,42 @@
 
 
     <!-- Navigation -->
-    
     <?php  include "includes/navigation.php"; ?>
-    
+
+    <?php
+
+    if (isset($_POST["submit"])){
+        //echo "it is working";
+        $username = $_POST["username"];
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+
+      $username= mysqli_real_escape_string($connection, $username);
+        $email= mysqli_real_escape_string($connection, $email);
+        $password= mysqli_real_escape_string($connection, $password);
+       // $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 10
+
+       $query= "select randSalt from users";
+       $select_randSalt_query = mysqli_query($connection, $query);
+       if(!$select_randSalt_query){
+        die("Query Failed". mysqli_error($connection));
+       }
+     $row= mysqli_fetch_array($select_randSalt_query);
+        echo $salt = $row['randSalt'];
+       // $password = crypt($password, $salt);
+
+       $query= "insert into users (username, user_email, user_password, user_role)";
+       $query.= "values ('{$username}', '{$email}', '{$password}', 'subscriber')";
+       $create_user_query = mysqli_query($connection, $query);
+       if(!$create_user_query){
+        die("Query Failed". mysqli_error($connection));
+        }
+
+       
+
+
+    }
+    ?>
  
     <!-- Page Content -->
     <div class="container">
