@@ -28,6 +28,10 @@
          $create_post_query= mysqli_query($connection,$query);
 
        confirm_Connection($create_post_query);
+       $p_id= mysqli_insert_id($connection);
+
+       echo "<p class='bg-success'>post with id:".$p_id." has been created successfully 
+    <a href='../posts_by_hany.php?p_id={$p_id}'>View Post <a/> OR <a href='posts.php'>Edit More Posts</a> </p>"; 
    }
 
         ?>
