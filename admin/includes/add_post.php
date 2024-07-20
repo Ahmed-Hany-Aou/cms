@@ -104,9 +104,10 @@
       
 
       <div class="form-group">
-       <label for="category">Post Status</label>
-       <input type="text" class="form-control" name="post_status"> 
-      </div>
+       <select name="post_status" id="">
+        <option value="draft">Select Post Status</option>
+        <option value="published">Published</option>
+        <option value="draft">Draft</option></div>
       
       
       
