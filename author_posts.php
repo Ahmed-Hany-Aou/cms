@@ -9,9 +9,9 @@
         <!-- Blog Post Content Column -->
         <div class="col-md-8">
             <?php
-            if (isset($_GET['p_id'])) {
-                $post_id = $_GET['p_id'];
-                $query = "SELECT * FROM posts WHERE post_id = $post_id";
+            if (isset($_GET['author'])) {
+                $the_post_author = $_GET['author'];
+                $query = "SELECT * FROM posts WHERE post_author = '{$the_post_author}'";
                 $posts_query = mysqli_query($connection, $query);
 
                 if (!$posts_query) {
@@ -26,9 +26,9 @@
                     $post_content = substr($row['post_content'], 0, 50);
             ?>
                     <!-- Title -->
-                    <h1><a href="posts_by_hany.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a></h1>
+                    <h1><a href="posts_by_hany.php?p_id=<?php echo $row['post_id']; ?>"><?php echo $post_title; ?></a></h1>
                     <!-- Author -->
-                    <p class="lead">by <a href="author_posts.php?author=<?php echo $post_author ?>&p_id=<?php echo $post_id; ?>"><?php echo $post_author ?></a></p>
+                    <p class="lead">by <a href="author_posts.php?author=<?php echo $post_author ?>"><?php echo $post_author ?></a></p>
                     <hr>
                     <!-- Date/Time -->
                     <p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date; ?></p>
@@ -44,8 +44,6 @@
             ?>
 
             <!-- Blog Comments -->
-            
-
             <!-- Comments Form -->
             <div class="well">
                 <h4>Leave a Comment:</h4>
