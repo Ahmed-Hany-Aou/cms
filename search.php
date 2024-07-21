@@ -8,6 +8,14 @@
         <!-- Blog Entries Column -->
         <div class="col-md-8">
             <?php
+            $query="select * from posts";
+            $find_count=mysqli_query($connection,$query);
+            $count=mysqli_num_rows($find_count);
+            echo $count;
+
+
+
+
             $display_posts = true;  // Initialize a flag to control post display
 
             if (isset($_POST['submit'])) {
@@ -28,7 +36,7 @@
                 }
             } else {
                 // Fetch all posts by default
-                $query = "SELECT * FROM posts";
+                $query = "SELECT * FROM posts ";
                 $posts_query = mysqli_query($connection, $query);
             }
 
