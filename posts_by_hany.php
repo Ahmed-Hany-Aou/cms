@@ -14,6 +14,11 @@
                 $query = "SELECT * FROM posts WHERE post_id = $post_id";
                 $posts_query = mysqli_query($connection, $query);
 
+
+                $query= "update posts set posts_views_count= posts_views_count +1 where post_id={$post_id}";
+                $views_query = mysqli_query($connection, $query);
+                
+
                 if (!$posts_query) {
                     die("Query failed: " . mysqli_error($connection));
                 }
