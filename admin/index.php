@@ -2,6 +2,31 @@
 <?php include "../includes/dashboard_functions.php"; ?>
 
 <div id="wrapper">
+    <?php
+$session = session_id();
+$time= = time()
+$time_out_in_seconds = 60 ;
+
+$query = "select * from users_online where session = '$session'";
+$send_query = mysqli_query($connection, $query);
+$count = mysqli_num_rows($send_query);
+if($count == NULL){
+    mysqli_query($connection, "insert into users_online(session, time) values('$session', '$time')");
+    
+
+
+
+
+
+
+
+?>
+
+
+
+
+
+
     <!-- Navigation -->
     <?php include "includes/admin_navigation.php"; ?>
     <div id="page-wrapper">
