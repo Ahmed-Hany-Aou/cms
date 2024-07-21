@@ -20,8 +20,22 @@
 
             $display_posts = true;  // Initialize a flag to control post display
 
-            if (isset($_POST['submit']) || isset($_GET['search'])) {
-                $search = isset($_POST['search']) ? $_POST['search'] : $_GET['search'];
+            if (isset($_POST['submit'])) {
+                $search = $_POST['search'];
+                $_SESSION['search'] = $search; // Save search query in session
+                header("Location: search.php?search=$search&page=1"); // Redirect to maintain state
+                exit();
+            }
+
+            if (isset($_GET['search'])) {
+                $search = $_GET['search'];
+            } elseif (isset($_SESSION['search'])) {
+                $search = $_SESSION['search'];
+            } else {
+                $search = '';
+            }
+
+            if (!empty($search)) {
                 $query = "SELECT * FROM posts WHERE post_tags LIKE '%$search%' LIMIT $page_1, $per_page";
                 $search_query = mysqli_query($connection, $query);
 
@@ -78,7 +92,7 @@
                         </h1>
 
                         <!-- First Blog Post -->
-                        <h2 class="<?php echo isset($_POST['submit']) || isset($_GET['search']) ? 'post-title-green' : ''; ?>">
+                        <h2 class="<?php echo !empty($search) ? 'post-title-green' : ''; ?>">
                             <a href="posts_by_hany.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
                         </h2>
                         <p class="lead">
