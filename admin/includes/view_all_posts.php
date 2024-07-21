@@ -43,6 +43,14 @@ if (isset($_POST['checkBoxArray'])) {
                 confirm_Connection($create_post_query);
 
                 break;
+
+                case 'reset_posts_views':
+                $query = "UPDATE posts SET posts_views_count = 0 WHERE post_id = {$postValueId}";
+                $update_to_reset_views = mysqli_query($connection, $query);
+                confirm_Connection($update_to_reset_views);
+                break;
+
+
         }
     }
 }
@@ -57,6 +65,7 @@ if (isset($_POST['checkBoxArray'])) {
                 <option value="draft">Draft</option>
                 <option value="delete">Delete</option>
                 <option value="clone">Clone/Copy</option>
+                <option value="reset_posts_views">Reset Posts Views</option>
             </select>
         </div>
 
