@@ -1,4 +1,9 @@
 <?php
+function redirect($location) {
+    header("Location: " . $location);
+    exit;
+}
+
 function confirm_Connection($result) {
     global $connection;
     if (!$result) {
