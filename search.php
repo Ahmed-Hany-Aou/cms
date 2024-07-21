@@ -1,33 +1,6 @@
-<?php
-include "includes/db.php";
-include "includes/header.php";
-include "includes/navigation.php";
-
-// Define how many results you want per page
-$posts_per_page = 10;
-
-// Find out the number of results stored in database
-$query = "SELECT * FROM posts WHERE post_status = 'published'";
-$find_count = mysqli_query($connection, $query);
-$total_posts = mysqli_num_rows($find_count);
-
-// Determine the number of pages required
-$total_pages = ceil($total_posts / $posts_per_page);
-
-// Determine which page number visitor is currently on
-if (isset($_GET['page'])) {
-    $page = $_GET['page'];
-} else {
-    $page = 1;
-}
-
-// Determine the sql LIMIT starting number for the results on the displaying page
-$start_limit = ($page - 1) * $posts_per_page;
-
-// Fetch the selected results from database
-$query = "SELECT * FROM posts WHERE post_status = 'published' LIMIT $start_limit, $posts_per_page";
-$posts_query = mysqli_query($connection, $query);
-?>
+<?php include "includes/db.php"; ?>
+<?php include "includes/header.php"; ?>
+<?php include "includes/navigation.php"; ?>
 
 <!-- Page Content -->
 <div class="container">
@@ -35,6 +8,19 @@ $posts_query = mysqli_query($connection, $query);
         <!-- Blog Entries Column -->
         <div class="col-md-8">
             <?php
+            $per_page = 10;
+
+            if (isset($_GET['page'])) {
+                $page = $_GET['page'];
+            } else {
+                $page = 1;
+            }
+
+            $page_1 = ($page - 1) * $per_page;
+
+            $query = "SELECT * FROM posts LIMIT $page_1, $per_page";
+            $posts_query = mysqli_query($connection, $query);
+
             while ($row = mysqli_fetch_assoc($posts_query)) {
                 $post_id = $row['post_id'];
                 $post_title = $row['post_title'];
@@ -42,52 +28,70 @@ $posts_query = mysqli_query($connection, $query);
                 $post_date = $row['post_date'];
                 $post_image = $row['post_image'];
                 $post_content = substr($row['post_content'], 0, 50);
-                ?>
-                <!-- Displaying the Post -->
-                <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
-                </h1>
-                <!-- First Blog Post -->
-                <h2>
-                    <a href="posts_by_hany.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
-                </h2>
-                <p class="lead">
-                    by <a href="author_posts.php?author=<?php echo $post_author ?>&p_id=<?php echo $post_id; ?>"><?php echo $post_author ?></a>
-                </p>
-                <p><span class="glyphicon glyphicon-time"></span> <?php echo $post_date; ?></p>
-                <hr>
-                <a href="posts_by_hany.php?p_id=<?php echo $post_id; ?>">
-                    <img class="img-responsive" src="hanyimage/<?php echo $post_image; ?>" alt="Hany's Image" style="width: 200px; height: 300;">
-                </a>
-                <hr>
-                <p><?php echo $post_content; ?></p>
-                <a class="btn btn-primary" href="posts_by_hany.php?p_id=<?php echo $post_id; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-                <hr>
-                <?php
+                $post_status = $row['post_status'];
+
+                if ($post_status !== 'published') {
+                    echo "<h2 class='text-center' style='color: red; text-align: center; font-weight: bold;'>🚫 This post is not published yet.</h2>
+                        <p class='text-center' style='color: grey; text-align: center;'>
+                        Please <a href='http://localhost/dashboard/demo/CMS_TEMPLATE/admin/posts.php?source=edit_post&p_id=$post_id' style='color: blue;'>edit the post</a> for more details. <br>
+                        <strong>Post ID:</strong> $post_id
+                        </p>";
+                } else {
+                    ?>
+                    <!-- Displaying the Post -->
+                    <h1 class="page-header">
+                        Page Heading
+                        <small>Secondary Text</small>
+                    </h1>
+
+                    <!-- First Blog Post -->
+                    <h2>
+                        <a href="posts_by_hany.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
+                    </h2>
+                    <p class="lead">
+                        <a href="author_posts.php?author=<?php echo $post_author ?>&p_id=<?php echo $post_id; ?>"><?php echo $post_author ?></a>
+                    </p>
+                    <p><span class="glyphicon glyphicon-time"></span> <?php echo $post_date; ?></p>
+                    <hr>
+                    <a href="posts_by_hany.php?p_id=<?php echo $post_id; ?>">
+                        <img class="img-responsive" src="hanyimage/<?php echo $post_image; ?>" alt="Hany's Image" style="width: 200px; height: 300;">
+                    </a>
+                    <hr>
+                    <p><?php echo $post_content; ?></p>
+                    <a class="btn btn-primary" href="posts_by_hany.php?p_id=<?php echo $post_id; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+                    <hr>
+                    <?php
+                }
             }
             ?>
 
             <!-- Pager -->
             <ul class="pager">
                 <?php
-                // Display previous page link if not on the first page
+                $query = "SELECT * FROM posts";
+                $find_count = mysqli_query($connection, $query);
+                $count = mysqli_num_rows($find_count);
+                $count = ceil($count / $per_page);
+
+                // Previous button
                 if ($page > 1) {
-                    echo "<li class='previous'><a href='search.php?page=" . ($page - 1) . "'>&larr; Older</a></li>";
+                    $prev_page = $page - 1;
+                    echo "<li class='previous'><a href='search.php?page={$prev_page}'>&larr; Older</a></li>";
                 }
 
-                // Display page numbers
-                for ($i = 1; $i <= $total_pages; $i++) {
+                // Page numbers
+                for ($i = 1; $i <= $count; $i++) {
                     if ($i == $page) {
-                        echo "<li class='active'><a href='search.php?page={$i}'>{$i}</a></li>";
+                        echo "<li><a class='active_link' href='search.php?page={$i}'>{$i}</a></li>";
                     } else {
                         echo "<li><a href='search.php?page={$i}'>{$i}</a></li>";
                     }
                 }
 
-                // Display next page link if not on the last page
-                if ($page < $total_pages) {
-                    echo "<li class='next'><a href='search.php?page=" . ($page + 1) . "'>Newer &rarr;</a></li>";
+                // Next button
+                if ($page < $count) {
+                    $next_page = $page + 1;
+                    echo "<li class='next'><a href='search.php?page={$next_page}'>Newer &rarr;</a></li>";
                 }
                 ?>
             </ul>
@@ -97,6 +101,7 @@ $posts_query = mysqli_query($connection, $query);
         <?php include "includes/sidebar.php"; ?>
     </div>
     <!-- /.row -->
+
     <hr>
 
     <!-- Footer -->
@@ -110,3 +115,10 @@ $posts_query = mysqli_query($connection, $query);
 <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
+
+<style>
+    .active_link {
+        font-weight: bold;
+        color: red;
+    }
+</style>
