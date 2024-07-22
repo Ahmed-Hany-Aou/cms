@@ -13,6 +13,7 @@ if (isset($_POST["submit"])) {
     $username = mysqli_real_escape_string($connection, $username);
     $email = mysqli_real_escape_string($connection, $email);
     $password = mysqli_real_escape_string($connection, $password);
+   // $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 10));
 
     // Using password_hash for hashing the password
     $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 10));

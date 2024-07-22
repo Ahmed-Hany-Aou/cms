@@ -12,9 +12,11 @@
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
-                <li><a href="../search.php?search=&page=1">Home Site</a></li>
+            <li><a href="">users online = <?php echo online_users();?></a>
+                <li><a href="../search.php?search=&page=1">Home Site</a>
+                
                
-               
+                
               
 
                 
