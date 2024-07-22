@@ -60,9 +60,10 @@
                     $insert_comments_query = mysqli_query($connection, $query);
                     confirm_Connection($insert_comments_query);
 
-                    $query = "UPDATE posts SET post_comment_count = post_comment_count + 1 WHERE post_id = $the_post_id";
-                    $update_comment_count = mysqli_query($connection, $query);
-                    confirm_Connection($update_comment_count);
+                   // $query = "UPDATE posts SET post_comment_count = post_comment_count + 1 WHERE post_id = $the_post_id";
+                   // $update_comment_count = mysqli_query($connection, $query);
+                   // confirm_Connection($update_comment_count);
+                   // we will use another comment system
 
                     // Redirect to the same page to clear the form and show the new comment
                     redirect("posts_by_hany.php?p_id=$the_post_id");
