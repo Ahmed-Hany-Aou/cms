@@ -1,11 +1,9 @@
 <?php
-
 if (isset($_POST['create_post'])) {
 
     $post_title = ($_POST['title']);
-    $post_author = ($_POST['author']);
-    // $post_user = ($_POST['post_user']);
-    // $post_category_id = ($_POST['post_category_id']);
+    $post_user = ($_POST['post_user']);
+    $post_category_id = ($_POST['post_category']);
     $post_status = ($_POST['post_status']);
 
     $post_image = ($_FILES['image']['name']);
@@ -17,17 +15,16 @@ if (isset($_POST['create_post'])) {
 
     move_uploaded_file($post_image_temp, "../hanyimage/$post_image");
 
-    $query = "INSERT INTO posts (/*post_category_id,*/ post_title, post_author, post_date, post_image, post_content, post_tags, post_status) ";
-    $query .= "VALUES ('{$post_title}', '{$post_author}', now(), '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_status}')";
+    $query = "INSERT INTO posts (post_category_id, post_title, post_user, post_date, post_image, post_content, post_tags, post_status) ";
+    $query .= "VALUES ({$post_category_id}, '{$post_title}', {$post_user}, now(), '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_status}')";
     $create_post_query = mysqli_query($connection, $query);
 
     confirm_Connection($create_post_query);
     $p_id = mysqli_insert_id($connection);
 
     echo "<p class='bg-success'>post with id: " . $p_id . " has been created successfully 
-    <a href='../posts_by_hany.php?p_id={$p_id}'>View Post <a/> OR <a href='posts.php'>Edit More Posts</a> </p>";
+    <a href='../posts_by_hany.php?p_id={$p_id}'>View Post</a> OR <a href='posts.php'>Edit More Posts</a></p>";
 }
-
 ?>
 
 <form action="" method="post" enctype="multipart/form-data">
@@ -44,32 +41,22 @@ if (isset($_POST['create_post'])) {
             $query = "SELECT * FROM categories";
             $select_categories = mysqli_query($connection, $query);
 
-            if (!$select_categories) {
-                die("Query failed: " . mysqli_error($connection));
-            }
-
             while ($row = mysqli_fetch_assoc($select_categories)) {
                 $cat_id = $row['id'];
                 $cat_title = $row['cat_title'];
 
                 echo "<option value='{$cat_id}'>{$cat_title}</option>";
             }
-
-            mysqli_free_result($select_categories);
             ?>
         </select>
     </div>
 
     <div class="form-group">
         <label for="users">Users</label>
-        <select class="form-control" name="post_author">
+        <select class="form-control" name="post_user">
             <?php
             $query = "SELECT * FROM users";
             $select_users = mysqli_query($connection, $query);
-
-            if (!$select_users) {
-                die("Query failed: " . mysqli_error($connection));
-            }
 
             while ($row = mysqli_fetch_assoc($select_users)) {
                 $user_id = $row['user_id'];
@@ -77,25 +64,9 @@ if (isset($_POST['create_post'])) {
 
                 echo "<option value='{$user_id}'>{$username}</option>";
             }
-
-            mysqli_free_result($select_users);
             ?>
         </select>
     </div>
-
-    <!-- 
-    <div class="form-group">
-        <label for="category">Post Category id</label>
-        <input type="text" class="form-control" name="post_category_id">
-    </div>
-    -->
-
-    <!-- 
-    <div class="form-group">
-        <label for="category">Post Author</label>
-        <input type="text" class="form-control" name="author">
-    </div>
-    -->
 
     <div class="form-group">
         <select name="post_status" id="">

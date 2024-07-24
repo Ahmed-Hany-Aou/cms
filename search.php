@@ -71,7 +71,7 @@
                 while ($row = mysqli_fetch_assoc($posts_query)) {
                     $post_id = $row['post_id'];
                     $post_title = $row['post_title'];
-                    $post_author = $row['post_author'];
+                    $post_user = $row['post_user'];
                     $post_date = $row['post_date'];
                     $post_image = $row['post_image'];
                     $post_content = substr($row['post_content'], 0, 50);
@@ -95,8 +95,25 @@
                         <h2 class="<?php echo !empty($search) ? 'post-title-green' : ''; ?>">
                             <a href="posts_by_hany.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
                         </h2>
+                        <?php 
+                         if (!empty($post_author)) {
+                            echo "<td>$post_author</td>";
+                        } elseif (!empty($post_user)) {
+                            $query_user = "SELECT * FROM users WHERE user_id = $post_user";
+                            $select_user = mysqli_query($connection, $query_user);
+                            $user_row = mysqli_fetch_assoc($select_user);
+                            $username = $user_row['username'];
+                           
+                        } else {
+                            echo "<td>Unknown</td>";
+                        }
+                        
+                        
+                        ?>
+
+
                         <p class="lead">
-                            <a href="author_posts.php?author=<?php echo $post_author ?>&p_id=<?php echo $post_id; ?>"><?php echo $post_author ?></a>
+                            <a href="author_posts.php?author=<?php echo "$username"; ?>&p_id=<?php echo $post_id; ?>"><?php echo "<td>$username</td>"; ?></a>
                         </p>
                         <p><span class="glyphicon glyphicon-time"></span> <?php echo $post_date; ?></p>
                         <hr>
