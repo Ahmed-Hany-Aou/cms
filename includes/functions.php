@@ -1,6 +1,8 @@
 <?php
-session_start();
-include("../includes/db.php");
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+include("db.php");
 
 function online_users() {
     global $connection;
@@ -34,12 +36,6 @@ function online_users() {
 if (isset($_GET['onlineusers'])) {
     online_users();
 }
-
-
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 function redirect($location) {

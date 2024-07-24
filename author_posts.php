@@ -11,7 +11,7 @@
             <?php
             if (isset($_GET['author'])) {
                 $the_post_author = $_GET['author'];
-                $query = "SELECT * FROM posts WHERE post_author = '{$the_post_author}'";
+                $query = "SELECT * FROM posts WHERE post_user = '{$the_post_author}'";
                 $posts_query = mysqli_query($connection, $query);
 
                 if (!$posts_query) {
@@ -20,15 +20,21 @@
 
                 while ($row = mysqli_fetch_assoc($posts_query)) {
                     $post_title = $row['post_title'];
-                    $post_author = $row['post_author'];
+                    $post_user = $row['post_user'];
                     $post_date = $row['post_date'];
                     $post_image = $row['post_image'];
                     $post_content = substr($row['post_content'], 0, 50);
+
+                    // Get the author's name
+                    $user_query = "SELECT username FROM users WHERE user_id = {$post_user}";
+                    $user_result = mysqli_query($connection, $user_query);
+                    $user_row = mysqli_fetch_assoc($user_result);
+                    $username = $user_row['username'];
             ?>
                     <!-- Title -->
                     <h1><a href="posts_by_hany.php?p_id=<?php echo $row['post_id']; ?>"><?php echo $post_title; ?></a></h1>
                     <!-- Author -->
-                    <p class="lead">by <a href="author_posts.php?author=<?php echo $post_author ?>"><?php echo $post_author ?></a></p>
+                    <p class="lead">by <a href="author_posts.php?author=<?php echo $post_user ?>"><?php echo $username; ?></a></p>
                     <hr>
                     <!-- Date/Time -->
                     <p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date; ?></p>
@@ -45,25 +51,7 @@
 
             <!-- Blog Comments -->
             <!-- Comments Form -->
-            <div class="well">
-                <h4>Leave a Comment:</h4>
-                <form id="commentForm" action="" method="post" role="form">
-                    <div class="form-group">
-                        <label for="Author">Author</label>
-                        <input type="text" class="form-control" name="comment_author" placeholder="Enter your name">
-                    </div>
-                    <div class="form-group">
-                        <label for="Author">Email</label>
-                        <input type="email" class="form-control" name="comment_email" placeholder="Enter your Email">
-                    </div>
-                    <div class="form-group">
-                        <label for="comment">Your Comment</label>
-                        <textarea class="form-control" rows="3" name="comment_content" placeholder="Enter your comment"></textarea>
-                    </div>
-                    <button type="submit" name="create_comment" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
-
+            
             <?php
             if (isset($_POST['create_comment'])) {
                 $the_post_id = $_GET['p_id'];
@@ -96,31 +84,32 @@
 
         <!-- Blog Sidebar Widgets Column -->
         <?php include "includes/sidebar.php"; ?>
-        <!-- /.row -->
-        <hr>
-        <!-- Footer -->
-        <?php include "includes/footer.php"; ?>
     </div>
-    <!-- /.container -->
+    <!-- /.row -->
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-    <script>
-    document.getElementById('commentForm').addEventListener('submit', function(event) {
-        var author = document.querySelector('input[name="comment_author"]').value.trim();
-        var email = document.querySelector('input[name="comment_email"]').value.trim();
-        var comment = document.querySelector('textarea[name="comment_content"]').value.trim();
+    <hr>
+    <!-- Footer -->
+    <?php include "includes/footer.php"; ?>
+</div>
+<!-- /.container -->
 
-        if (author === "" || email === "" || comment === "") {
-            alert('All fields are required!');
-            event.preventDefault(); // Prevent the form from being submitted
-        }
-        else{
-            alert ("Comment added successfully and it will be aproved by admin soon");
-        }
-    });
-    </script>
+<!-- jQuery -->
+<script src="js/jquery.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+<script>
+document.getElementById('commentForm').addEventListener('submit', function(event) {
+    var author = document.querySelector('input[name="comment_author"]').value.trim();
+    var email = document.querySelector('input[name="comment_email"]').value.trim();
+    var comment = document.querySelector('textarea[name="comment_content"]').value.trim();
+
+    if (author === "" || email === "" || comment === "") {
+        alert('All fields are required!');
+        event.preventDefault(); // Prevent the form from being submitted
+    } else {
+        alert("Comment added successfully and it will be approved by admin soon");
+    }
+});
+</script>
 </body>
 </html>

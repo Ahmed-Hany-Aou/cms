@@ -90,10 +90,13 @@ while ($row = mysqli_fetch_assoc($select_posts_by_Id)) {
             mysqli_free_result($select_categories);
             ?>
         </select>
+
     </div>
     <div class="form-group">
         <label for="users">Users</label>
         <select class="form-control" name="post_user">
+        <!--<?php //echo "<option value='{$post_user}'>{$post_user}</option";?>-->
+
             <?php
             $query = "SELECT * FROM users";
             $select_users = mysqli_query($connection, $query);

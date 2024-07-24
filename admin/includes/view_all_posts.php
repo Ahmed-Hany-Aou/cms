@@ -74,8 +74,14 @@
                 } elseif (!empty($post_user)) {
                     $query_user = "SELECT * FROM users WHERE user_id = $post_user";
                     $select_user = mysqli_query($connection, $query_user);
-                    $user_row = mysqli_fetch_assoc($select_user);
-                    $username = $user_row['username'];
+
+                    if ($select_user && mysqli_num_rows($select_user) > 0) {
+                        $user_row = mysqli_fetch_assoc($select_user);
+                        $username = $user_row['username'];
+                    } else {
+                        $username = "Unknown";
+                    }
+
                     echo "<td>$username</td>";
                 } else {
                     echo "<td>Unknown</td>";

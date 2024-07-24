@@ -77,6 +77,18 @@
                     $post_content = substr($row['post_content'], 0, 50);
                     $post_status = $row['post_status'];
 
+                    // Get the author's name
+                    $username = "Unknown"; // Default value
+                    if (!empty($post_user)) {
+                        $user_query = "SELECT username FROM users WHERE user_id = {$post_user}";
+                        $user_result = mysqli_query($connection, $user_query);
+
+                        if ($user_result && mysqli_num_rows($user_result) > 0) {
+                            $user_row = mysqli_fetch_assoc($user_result);
+                            $username = $user_row['username'];
+                        }
+                    }
+
                     if ($post_status !== 'published') {
                         echo "<h2 class='text-center' style='color: red; text-align: center; font-weight: bold;'>🚫 This post is not published yet.</h2>
                         <p class='text-center' style='color: grey; text-align: center;'>
@@ -95,25 +107,8 @@
                         <h2 class="<?php echo !empty($search) ? 'post-title-green' : ''; ?>">
                             <a href="posts_by_hany.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
                         </h2>
-                        <?php 
-                         if (!empty($post_author)) {
-                            echo "<td>$post_author</td>";
-                        } elseif (!empty($post_user)) {
-                            $query_user = "SELECT * FROM users WHERE user_id = $post_user";
-                            $select_user = mysqli_query($connection, $query_user);
-                            $user_row = mysqli_fetch_assoc($select_user);
-                            $username = $user_row['username'];
-                           
-                        } else {
-                            echo "<td>Unknown</td>";
-                        }
-                        
-                        
-                        ?>
-
-
                         <p class="lead">
-                            <a href="author_posts.php?author=<?php echo "$username"; ?>&p_id=<?php echo $post_id; ?>"><?php echo "<td>$username</td>"; ?></a>
+                            by <a href="author_posts.php?author=<?php echo $post_user; ?>"><?php echo $username; ?></a>
                         </p>
                         <p><span class="glyphicon glyphicon-time"></span> <?php echo $post_date; ?></p>
                         <hr>
