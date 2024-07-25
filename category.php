@@ -2,7 +2,6 @@
 <?php include "includes/header.php"; ?>
 <?php include "includes/navigation.php"; ?>
 
-
 <!-- Page Content -->
 <div class="container">
     <div class="row">
@@ -13,6 +12,10 @@
                 $cat_id = $_GET['category'];
 
                 $query = "SELECT * FROM posts WHERE post_category_id = {$cat_id}";
+                if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+                    $query .= " AND post_status = 'published'";
+                }
+
                 $select_posts_by_category = mysqli_query($connection, $query);
 
                 if (!$select_posts_by_category) {
@@ -26,7 +29,7 @@
                         $post_author = $row['post_author'];
                         $post_date = $row['post_date'];
                         $post_image = $row['post_image'];
-                        $post_content =substr( $row['post_content'],0,50);
+                        $post_content = substr($row['post_content'], 0, 50);
                         ?>
                         <!-- Displaying the Post -->
                         <h1 class="page-header">
@@ -51,23 +54,14 @@
                         <?php
                     }
                 } else {
-                    echo "<h1>No posts found in this category</h1>";
+                    echo "<h2 class='text-center' style='color: red; text-align: center; font-weight: bold;'>🚫 No posts available in this category.</h2>";
                 }
             } else {
-                echo "<h1>No category selected</h1>";
+                echo "<h2 class='text-center' style='color: red; text-align: center; font-weight: bold;'>🚫 No category selected.</h2>";
             }
             ?>
-
-            <!-- Pager -->
-            <ul class="pager">
-                <li class="previous">
-                    <a href="#">&larr; Older</a>
-                </li>
-                <li class="next">
-                    <a href="#">Newer &rarr;</a>
-                </li>
-            </ul>
         </div>
+
         <!-- Blog Sidebar Widgets Column -->
         <?php include "includes/sidebar.php"; ?>
     </div>
