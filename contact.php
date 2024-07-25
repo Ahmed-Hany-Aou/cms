@@ -6,11 +6,17 @@
 
 <?php
 if (isset($_POST["submit"])) {
-    $to = "support@Ahmed.com";
-    $subject = $_POST['subject'];
-    $body = $_POST['body'];
-   
+    $to = "ahmed.hany.boshra@gmail.com";
+    $subject = wordwrap($_POST['subject'], 70);
+    $body = $_POST['message'];
+    $headers = "From: " . $_POST['email'] . "\r\n";
 
+    // Send email
+    if (mail($to, $subject, $body, $headers)) {
+        echo "<p class='bg-success'>Message sent successfully!</p>";
+    } else {
+        echo "<p class='bg-danger'>Message sending failed. Please try again later.</p>";
+    }
 }
 ?>
 
@@ -22,7 +28,7 @@ if (isset($_POST["submit"])) {
                 <div class="col-xs-6 col-xs-offset-3">
                     <div class="form-wrap">
                         <h1>Contact</h1>
-                        <form role="form" action="registration.php" method="post" id="login-form" autocomplete="off">
+                        <form role="form" action="contact.php" method="post" id="login-form" autocomplete="off">
                             <div class="form-group">
                                 <label for="username" class="sr-only">Username</label>
                                 <input type="text" name="username" id="username" class="form-control" placeholder="Enter Your Name">
@@ -56,12 +62,6 @@ if (isset($_POST["submit"])) {
     <script src="cs_template/admin/js/summernote.js"></script>
 
     <!-- Initialize Summernote -->
-    <script>
-        $(document).ready(function() {
-            $('#summernote').summernote({
-                height: 200 // set the height of the editor
-            });
-        });
-    </script>
+    
 
 <?php include "includes/footer.php"; ?>
