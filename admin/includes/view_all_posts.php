@@ -1,4 +1,5 @@
 <?php 
+include("delete_modal.php");
 
 if (isset($_POST['checkBoxArray'])) {
     foreach ($_POST['checkBoxArray'] as $postValueId) {
@@ -72,6 +73,9 @@ if (isset($_POST['checkBoxArray'])) {
 }
 ?>
 
+<!-- Your content -->
+<?php include("includes/delete_modal.php"); ?>
+    
 <form action="" method='post'>
     <table class="table table-bordered table-hover">
         <div id="bulkOptionContainer" class="col-xs-4">
@@ -183,7 +187,8 @@ if (isset($_POST['checkBoxArray'])) {
                 echo "<td>$post_views_count</td>";
                 echo "<td><a href='../posts_by_hany.php?p_id={$post_id}'>View Post</a></td>";
                 echo "<td><a href='posts.php?source=edit_post&p_id={$post_id}'>Edit</a></td>";
-                echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to delete this post ?');\" href='posts.php?delete={$post_id}'>Delete</a></td>";
+                echo "<td><a rel='$post_id' href='javascript:void(0);' class='delete_link'>Delete</a></td>";
+             //   echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to delete this post ?');\" href='posts.php?delete={$post_id}'>Delete</a></td>";
                 echo "</tr>";
             }
             ?>
@@ -197,3 +202,26 @@ if (isset($_GET['delete'])) {
     deleteposts($post_id_to_delete);
 }
 ?>
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function(){
+       
+       $(".delete_link").on('click',function(){
+       
+        var id = $(this).attr("rel");
+        var delete_url = "posts.php?delete="+ id +" ";
+        $(".modal_delete_link").attr("href",delete_url);
+        $("#exampleModal").modal('show');
+
+       });
+
+    });
+
+</script>
+
+</body>
+</html>

@@ -64,4 +64,5 @@ if (isset($_POST["submit"])) {
     <!-- Initialize Summernote -->
     
 
+    <?php include "includes/admin_footer.php"; ?>
 <?php include "includes/footer.php"; ?>
