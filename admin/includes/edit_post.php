@@ -71,6 +71,7 @@ while ($row = mysqli_fetch_assoc($select_posts_by_Id)) {
             $query = "SELECT * FROM categories";
             $select_categories = mysqli_query($connection, $query);
 
+
             if (!$select_categories) {
                 die("Query failed: " . mysqli_error($connection));
             }
@@ -81,7 +82,7 @@ while ($row = mysqli_fetch_assoc($select_posts_by_Id)) {
 
                 // Select the current category
                 if ($cat_id == $post_category_id) {
-                    echo "<option value='{$cat_id}' selected>{$cat_title}</option>";
+                    echo "<option selected value='{$cat_id}'>{$cat_title}</option>";
                 } else {
                     echo "<option value='{$cat_id}'>{$cat_title}</option>";
                 }
