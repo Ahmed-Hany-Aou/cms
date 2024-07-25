@@ -57,17 +57,25 @@
                 }
             } else {
                 // Fetch all posts by default
-                $query = "SELECT * FROM posts LIMIT $page_1, $per_page";
+                if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') {
+                    $query = "SELECT * FROM posts LIMIT $page_1, $per_page";
+                } else {
+                    $query = "SELECT * FROM posts WHERE post_status = 'published' LIMIT $page_1, $per_page";
+                }
                 $posts_query = mysqli_query($connection, $query);
 
-                $count_query = "SELECT * FROM posts";
+                if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') {
+                    $count_query = "SELECT * FROM posts";
+                } else {
+                    $count_query = "SELECT * FROM posts WHERE post_status = 'published'";
+                }
                 $find_count = mysqli_query($connection, $count_query);
                 $total_results = mysqli_num_rows($find_count);
                 $count = ceil($total_results / $per_page);
             }
 
             // Loop through the results and display posts only if allowed
-            if ($display_posts && isset($posts_query)) {
+            if ($display_posts && isset($posts_query) && mysqli_num_rows($posts_query) > 0) {
                 while ($row = mysqli_fetch_assoc($posts_query)) {
                     $post_id = $row['post_id'];
                     $post_title = $row['post_title'];
@@ -89,7 +97,7 @@
                         }
                     }
 
-                    if ($post_status !== 'published') {
+                    if ($post_status !== 'published' && $_SESSION['user_role'] !== 'admin') {
                         echo "<h2 class='text-center' style='color: red; text-align: center; font-weight: bold;'>🚫 This post is not published yet.</h2>
                         <p class='text-center' style='color: grey; text-align: center;'>
                         Please <a href='http://localhost/dashboard/demo/CMS_TEMPLATE/admin/posts.php?source=edit_post&p_id=$post_id' style='color: blue;'>edit the post</a> for more details. <br>
@@ -121,6 +129,10 @@
                         <hr>
                         <?php
                     }
+                }
+            } else {
+                if ($_SESSION['user_role'] !== 'admin') {
+                    echo "<h2 class='text-center' style='color: red; text-align: center; font-weight: bold;'>🚫 No posts available.</h2>";
                 }
             }
             ?>
