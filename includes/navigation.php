@@ -1,4 +1,3 @@
-
 <?php session_start(); ?>
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -17,51 +16,34 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
 
-
                 <?php 
-                
-                $query='select * from categories LIMIT 5';
-                $select_all_cateogries_query =mysqli_query($connection,$query);
-                while($row=mysqli_fetch_assoc($select_all_cateogries_query)){
-                    $cat_titlle=$row['cat_title'];
-                echo "<li><a href='#'>{$cat_titlle}</a></li>";
+                $query = 'SELECT * FROM categories LIMIT 5';
+                $select_all_categories_query = mysqli_query($connection, $query);
+                while ($row = mysqli_fetch_assoc($select_all_categories_query)) {
+                    $cat_id = $row['id'];  // Fetching the category id
+                    $cat_title = $row['cat_title'];
+                    $active = (isset($_GET['category']) && $_GET['category'] == $cat_id) ? 'active' : '';
+                    echo "<li class='{$active}'><a href='category.php?category={$cat_id}'>{$cat_title}</a></li>";
                 }
                 ?>
-                <?php
 
+                <?php
+                $pageName = basename($_SERVER['PHP_SELF']);
+                $activeClass = 'class="active"';
+                ?>
+
+                <?php
                 if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
-                    echo '<li><a href="admin/index.php">Admin</a></li>';
+                    echo '<li ' . ($pageName == 'admin/index.php' ? $activeClass : '') . '><a href="admin/index.php">Admin</a></li>';
                     if (isset($_GET['p_id'])) {
                         $p_id = $_GET['p_id'];
-                    echo "<li><a href='admin/posts.php?source=edit_post&p_id={$p_id}'>Edit Post</a></li>";
+                        echo "<li " . ($pageName == 'admin/posts.php' ? $activeClass : '') . "><a href='admin/posts.php?source=edit_post&p_id={$p_id}'>Edit Post</a></li>";
+                    }
                 }
-            }
-
                 ?>
 
-
-                            
-            
-
-           
-
-               
-                <li>  <a href="./registration.php">Registration</a></li>
-                <li>  <a href="./contact.php">Contact Us</a></li>
-                    
-                </li>
-                <!--
-                <li>
-                    <a href="#">Services</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
-                -->
-
-            
-
-
+                <li <?php echo ($pageName == 'registration.php' ? $activeClass : ''); ?>><a href="./registration.php">Registration</a></li>
+                <li <?php echo ($pageName == 'contact.php' ? $activeClass : ''); ?>><a href="./contact.php">Contact Us</a></li>
 
             </ul>
         </div>
