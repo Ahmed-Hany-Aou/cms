@@ -17,40 +17,35 @@
         <!-- /.input-group -->
     </div>
 
-
-<!-- Login -->
-<div class="well">
-    <h4>Login</h4>
-    <form action="includes/login.php" method="post">
-        <div class="form-group">
-            <input name="username" type="text" class="form-control" placeholder="Enter your username">
-        </div>
-        <div class="form-group">
-            <input name="password" type="password" class="form-control" placeholder="Enter your password">
-        </div>
-        <button name="login" class="btn btn-default" type="submit">
-            <span class="glyphicon glyphicon-log-in"></span> Login
-        </button>
-    </form>
-    <!-- /.input-group -->
-</div>
-
-
-
+    <!-- Login -->
+    <div class="well">
+        <?php if(isset($_SESSION['user_role'])): ?>
+            <h4>Logged in as <?php echo $_SESSION['username']; ?></h4>
+            <a href="includes/logout.php" class="btn btn-primary">Logout</a>
+        <?php else: ?>
+            <h4>Login</h4>
+            <form action="includes/login.php" method="post">
+                <div class="form-group">
+                    <input name="username" type="text" class="form-control" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <input name="password" type="password" class="form-control" placeholder="Enter your password">
+                </div>
+                <button name="login" class="btn btn-default" type="submit">
+                    <span class="glyphicon glyphicon-log-in"></span> Login
+                </button>
+            </form>
+        <?php endif; ?>
+        <!-- /.input-group -->
+    </div>
 
     <!-- Blog Categories Well -->
     <div class="well">
         <?php
-        if (isset($_GET['category'])) {
-            $cat_id = $_GET['category'];
-        } else {
-            $cat_id = null; // or any default value if needed
-        }
-
         $query = "SELECT * FROM categories";
-        $select_cateogries_sidebar = mysqli_query($connection, $query);
+        $select_categories_sidebar = mysqli_query($connection, $query);
 
-        if (!$select_cateogries_sidebar) {
+        if (!$select_categories_sidebar) {
             die("Query failed: " . mysqli_error($connection));
         }
         ?>
@@ -60,10 +55,10 @@
             <div class="col-lg-12">
                 <ul class="list-unstyled">
                     <?php
-                    while ($row = mysqli_fetch_assoc($select_cateogries_sidebar)) {
-                        $cat_id = $row['id'];
-                        $cat_title = $row['cat_title'];
-                        echo "<li><a href='category.php?category=$cat_id'>{$cat_title}</a></li>";
+                    while ($row = mysqli_fetch_assoc($select_categories_sidebar)) {
+                        $category_id = $row['id'];
+                        $category_title = $row['cat_title'];
+                        echo "<li><a href='category.php?category=$category_id'>{$category_title}</a></li>";
                     }
                     ?>
                 </ul>
@@ -74,5 +69,4 @@
 
     <!-- Side Widget Well -->
     <?php include 'includes/widget.php' ?>
-
 </div>
