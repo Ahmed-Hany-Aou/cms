@@ -1,6 +1,16 @@
 <?php
-session_start();
-include("../includes/db.php");
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+include("db.php");
+
+
+
+function escape($string){
+    global $connection;
+    return mysqli_real_escape_string($connection, trim($string));
+}
+
 
 function online_users() {
     global $connection;
@@ -34,12 +44,6 @@ function online_users() {
 if (isset($_GET['onlineusers'])) {
     online_users();
 }
-
-
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 function redirect($location) {

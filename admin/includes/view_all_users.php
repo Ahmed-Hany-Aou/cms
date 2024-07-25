@@ -58,13 +58,18 @@
 
 <?php 
 if (isset($_GET['delete'])) {
-    $user_id_to_delete = $_GET['delete'];
+    if (isset($_SESSION['user_role'])){
+        if ($_SESSION['user_role'] == 'admin') {
+    
+    $user_id_to_delete = mysqli_real_escape_string($connection, $_GET['delete']);
     $query = "DELETE FROM users WHERE user_id = {$user_id}";
     $delete_user_query = mysqli_query($connection, $query);
     if (!$delete_user_query) {
         die("Query failed: " . mysqli_error($connection));
     }
     header("Location: user.php"); // Redirect to the comments page after deletion
+}
+}
 }
 
 if (isset($_GET['change_to_admin'])) {
