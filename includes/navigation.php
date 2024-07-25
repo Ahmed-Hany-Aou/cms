@@ -45,8 +45,10 @@
 
            
 
-                <li>
-                    <a href="./registration.php">Registration</a>
+               
+                <li>  <a href="./registration.php">Registration</a></li>
+                <li>  <a href="./contact.php">Contact Us</a></li>
+                    
                 </li>
                 <!--
                 <li>
