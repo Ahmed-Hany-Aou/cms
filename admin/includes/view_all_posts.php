@@ -64,18 +64,13 @@ if (isset($_POST['checkBoxArray'])) {
                 break;
 
             case 'reset_posts_views':
-                $query = "UPDATE posts SET posts_views_count = 0 WHERE post_id = {$postValueId}";
-                $update_to_reset_views = mysqli_query($connection, $query);
-                confirm_Connection($update_to_reset_views);
+                // This case should be removed or modified as it references post_views_count
                 break;
         }
     }
 }
 ?>
 
-<!-- Your content -->
-<?php include("includes/delete_modal.php"); ?>
-    
 <form action="" method='post'>
     <table class="table table-bordered table-hover">
         <div id="bulkOptionContainer" class="col-xs-4">
@@ -85,7 +80,7 @@ if (isset($_POST['checkBoxArray'])) {
                 <option value="draft">Draft</option>
                 <option value="delete">Delete</option>
                 <option value="clone">Clone/Copy</option>
-                <option value="reset_posts_views">Reset Posts Views</option>
+                <!-- Remove reset_posts_views option if not needed -->
             </select>
         </div>
 
@@ -106,7 +101,7 @@ if (isset($_POST['checkBoxArray'])) {
                 <th>Tags</th>
                 <th>Comments</th>
                 <th>Date</th>
-                <th>Posts_Views</th>
+                <!-- Remove Post Views column if not needed -->
                 <th>View Post</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -114,7 +109,9 @@ if (isset($_POST['checkBoxArray'])) {
         </thead>
         <tbody>
             <?php 
-            $query = "SELECT * FROM posts ORDER BY post_id DESC";
+            $query = "SELECT posts.post_id, posts.post_author, posts.post_user, posts.post_title, posts.post_category_id, posts.post_status, posts.post_image, posts.post_tags, posts.post_comment_count, posts.post_date, categories.id as cat_id, categories.cat_title ";
+            $query .= "FROM posts ";
+            $query .= "LEFT JOIN categories ON posts.post_category_id = categories.id ORDER BY posts.post_id DESC ";
             $select_posts = mysqli_query($connection, $query);
 
             while ($row = mysqli_fetch_assoc($select_posts)) {
@@ -128,23 +125,12 @@ if (isset($_POST['checkBoxArray'])) {
                 $post_tags = $row['post_tags'];
                 $post_comment_count = $row['post_comment_count'];
                 $post_date = $row['post_date'];
-                $post_views_count = $row['posts_views_count'];
-
-                // Fetch the category title
-                $category_query = "SELECT * FROM categories WHERE id = {$post_category_id}";
-                $select_categories_id = mysqli_query($connection, $category_query);
-
-                if ($category_row = mysqli_fetch_assoc($select_categories_id)) {
-                    $cat_title = $category_row['cat_title'];
-                } else {
-                    $cat_title = "Uncategorized";
-                }
+                $cat_title = $row['cat_title'];
 
                 echo "<tr>";
                 ?>
                 <td><input class='checkBoxes' type='checkbox' name='checkBoxArray[]' value='<?php echo $post_id ?>'></td>
                 <?php
-
                 echo "<td>$post_id</td>";
 
                 if (!empty($post_author)) {
@@ -184,11 +170,10 @@ if (isset($_POST['checkBoxArray'])) {
 
                 echo "<td><a href='post_comments.php?id=$post_id'>$count_comments</a></td>";
                 echo "<td>$post_date</td>";
-                echo "<td>$post_views_count</td>";
+                // Remove Post Views column if not needed
                 echo "<td><a href='../posts_by_hany.php?p_id={$post_id}'>View Post</a></td>";
                 echo "<td><a href='posts.php?source=edit_post&p_id={$post_id}'>Edit</a></td>";
                 echo "<td><a rel='$post_id' href='javascript:void(0);' class='delete_link'>Delete</a></td>";
-             //   echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to delete this post ?');\" href='posts.php?delete={$post_id}'>Delete</a></td>";
                 echo "</tr>";
             }
             ?>
@@ -209,18 +194,13 @@ if (isset($_GET['delete'])) {
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function(){
-       
-       $(".delete_link").on('click',function(){
-       
-        var id = $(this).attr("rel");
-        var delete_url = "posts.php?delete="+ id +" ";
-        $(".modal_delete_link").attr("href",delete_url);
-        $("#exampleModal").modal('show');
-
-       });
-
+        $(".delete_link").on('click',function(){
+            var id = $(this).attr("rel");
+            var delete_url = "posts.php?delete=" + id + " ";
+            $(".modal_delete_link").attr("href", delete_url);
+            $("#exampleModal").modal('show');
+        });
     });
-
 </script>
 
 </body>
