@@ -165,4 +165,24 @@ function show_comment($the_post_id) {
         echo "<p>No comments yet.</p>";
     }
 }
+
+function is_admin($username=''){
+    global $connection;
+    $query = "SELECT user_role FROM users WHERE username = '$username'";
+    $result = mysqli_query($connection, $query);
+    confirm_Connection($result);
+    $row = mysqli_fetch_assoc($result);
+    if($row['user_role']=='admin'){
+        return true;
+        }else{
+            return false;
+    }
+}
+
+
+
+
+
+
+
 ?>
