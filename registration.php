@@ -1,8 +1,7 @@
 <?php include "includes/db.php"; ?>
 <?php include "includes/header.php"; ?>
-
-<!-- Navigation -->
 <?php include "includes/navigation.php"; ?>
+<?php include "includes/functions.php"; ?> <!-- Add this line to include functions.php -->
 
 <?php
 if (isset($_POST["submit"])) {
@@ -10,19 +9,24 @@ if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
 
-    $username = mysqli_real_escape_string($connection, $username);
-    $email = mysqli_real_escape_string($connection, $email);
-    $password = mysqli_real_escape_string($connection, $password);
-   // $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 10));
+    if (username_exists($username)) {
+        $message = 'Username already exists, please choose a different username.';
+        echo "<script>alert('$message');</script>";
+    } else {
+        $username = mysqli_real_escape_string($connection, $username);
+        $email = mysqli_real_escape_string($connection, $email);
+        $password = mysqli_real_escape_string($connection, $password);
+        $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 10));
 
-    // Using password_hash for hashing the password
-    $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 10));
+        $query = "INSERT INTO users (username, user_email, user_password, user_role) ";
+        $query .= "VALUES ('{$username}', '{$email}', '{$password}', 'subscriber')";
+        $create_user_query = mysqli_query($connection, $query);
 
-    $query = "INSERT INTO users (username, user_email, user_password, user_role) ";
-    $query .= "VALUES ('{$username}', '{$email}', '{$password}', 'subscriber')";
-    $create_user_query = mysqli_query($connection, $query);
-    if (!$create_user_query) {
-        die("Query Failed" . mysqli_error($connection));
+        if (!$create_user_query) {
+            die("Query Failed: " . mysqli_error($connection));
+        } else {
+            echo "<script>alert('Registration successful!');</script>";
+        }
     }
 }
 ?>
@@ -66,9 +70,6 @@ if (isset($_POST["submit"])) {
             if (username === "" || email === "" || password === "") {
                 alert('All fields are required!');
                 event.preventDefault(); // Prevent the form from being submitted
-            }
-            else {
-                alert('Registration successful!');
             }
         });
     </script>
