@@ -196,6 +196,19 @@ function username_exists($username){
 
 
 
+function email_exists($email){
+    global $connection;
+    $query = "SELECT user_email FROM users WHERE user_email = '$email'";
+    $result= mysqli_query($connection,$query);
+    confirm_Connection($result);
+
+    if(mysqli_num_rows($result)>0){
+        return true;
+
+    } else {
+        return false;
+    }
+}
 
 
 

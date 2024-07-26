@@ -9,9 +9,20 @@ if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
 
-    if (username_exists($username)) {
-        $message = 'Username already exists, please choose a different username.';
-        echo "<script>alert('$message');</script>";
+    // Check if the username or email already exists
+    $usernameExists = username_exists($username);
+    $emailExists = email_exists($email);
+
+    if ($usernameExists || $emailExists) {
+        if ($usernameExists) {
+            $message = 'Username already exists, please choose a different username.';
+            echo "<script>alert('$message');</script>";
+        }
+
+        if ($emailExists) {
+            $message = 'Email already exists, please choose a different email.';
+            echo "<script>alert('$message');</script>";
+        }
     } else {
         $username = mysqli_real_escape_string($connection, $username);
         $email = mysqli_real_escape_string($connection, $email);
