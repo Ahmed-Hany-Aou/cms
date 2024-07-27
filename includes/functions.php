@@ -4,16 +4,10 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 include("db.php");
 
-
-
-
-
-
 function escape($string){
     global $connection;
     return mysqli_real_escape_string($connection, trim($string));
 }
-
 
 function online_users() {
     global $connection;
@@ -48,7 +42,6 @@ if (isset($_GET['onlineusers'])) {
     online_users();
 }
 
-////////////////////////////////////////////////////////////////////////////////
 function redirect($location) {
     header("Location: " . $location);
     exit;
@@ -101,14 +94,12 @@ function deleteCategories() {
     }
 }
 
-function deleteposts() {
+function deleteposts($post_id) {
     global $connection;
-    if (isset($_GET['delete'])) {
-        $the_post_id = $_GET['delete'];
-        $query = "DELETE FROM posts WHERE post_id = {$the_post_id}";
-        $delete_query = mysqli_query($connection, $query);
-        header("Location: posts.php");
-    }
+    $query = "DELETE FROM posts WHERE post_id = {$post_id}";
+    $delete_query = mysqli_query($connection, $query);
+    confirm_Connection($delete_query);
+    header("Location: posts.php");
 }
 
 function deleteComment($comment_id) {
@@ -182,7 +173,6 @@ function is_admin($username=''){
     }
 }
 
-
 function username_exists($username){
     global $connection;
     $query = "SELECT username FROM users WHERE username = '$username'";
@@ -197,8 +187,6 @@ function username_exists($username){
     }
 }
 
-
-
 function email_exists($email){
     global $connection;
     $query = "SELECT user_email FROM users WHERE user_email = '$email'";
@@ -212,8 +200,4 @@ function email_exists($email){
         return false;
     }
 }
-
-
-
-
 ?>

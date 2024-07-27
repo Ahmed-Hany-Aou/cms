@@ -40,7 +40,6 @@ if (isset($_POST['checkBoxArray'])) {
                     $post_status = $row['post_status'];
                 }
 
-                // Handle the user (author) field correctly
                 if (!empty($post_user)) {
                     $query_user = "SELECT * FROM users WHERE user_id = $post_user";
                     $select_user = mysqli_query($connection, $query_user);
@@ -64,7 +63,7 @@ if (isset($_POST['checkBoxArray'])) {
                 break;
 
             case 'reset_posts_views':
-                // This case should be removed or modified as it references post_views_count
+                // Remove or update this case if necessary
                 break;
         }
     }
@@ -80,7 +79,6 @@ if (isset($_POST['checkBoxArray'])) {
                 <option value="draft">Draft</option>
                 <option value="delete">Delete</option>
                 <option value="clone">Clone/Copy</option>
-                <!-- Remove reset_posts_views option if not needed -->
             </select>
         </div>
 
@@ -101,7 +99,6 @@ if (isset($_POST['checkBoxArray'])) {
                 <th>Tags</th>
                 <th>Comments</th>
                 <th>Date</th>
-                <!-- Remove Post Views column if not needed -->
                 <th>View Post</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -170,10 +167,11 @@ if (isset($_POST['checkBoxArray'])) {
 
                 echo "<td><a href='post_comments.php?id=$post_id'>$count_comments</a></td>";
                 echo "<td>$post_date</td>";
-                // Remove Post Views column if not needed
                 echo "<td><a href='../posts_by_hany.php?p_id={$post_id}'>View Post</a></td>";
-                echo "<td><a href='posts.php?source=edit_post&p_id={$post_id}'>Edit</a></td>";
-                echo "<td><a rel='$post_id' href='javascript:void(0);' class='delete_link'>Delete</a></td>";
+                echo "<td><a class='btn btn-info' href='posts.php?source=edit_post&p_id={$post_id}'>Edit</a></td>";
+
+                // Adding a form for deleting posts
+                echo "<td><form method='post'><input type='hidden' name='post_id' value='{$post_id}'><input class='btn btn-danger' type='submit' name='delete' value='Delete'></form></td>";
                 echo "</tr>";
             }
             ?>
@@ -182,9 +180,10 @@ if (isset($_POST['checkBoxArray'])) {
 </form>
 
 <?php 
-if (isset($_GET['delete'])) {
-    $post_id_to_delete = $_GET['delete'];
-    deleteposts($post_id_to_delete);
+if (isset($_POST['delete'])) {
+    $the_post_id = escape($_POST['post_id']);
+    echo "Attempting to delete post ID: {$the_post_id}"; // Debug message
+    deleteposts($the_post_id);
 }
 ?>
 
