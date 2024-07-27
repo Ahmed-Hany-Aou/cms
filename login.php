@@ -54,6 +54,9 @@ if(ifItIsMethod('post')) {
                                     <div class="form-group">
                                         <input name="login" class="btn btn-lg btn-primary btn-block" value="Login" type="submit">
                                     </div>
+                                    <div class="form-group">
+                                        <?php display_forgot_password_link(); ?>
+                                    </div>
                                 </form>
                             </div><!-- Body-->
                         </div>

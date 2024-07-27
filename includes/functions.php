@@ -4,6 +4,24 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 include("db.php");
 
+function track_failed_login_attempts() {
+    if (!isset($_SESSION['failed_login_attempts'])) {
+        $_SESSION['failed_login_attempts'] = 0;
+    }
+    $_SESSION['failed_login_attempts']++;
+}
+
+function reset_failed_login_attempts() {
+    $_SESSION['failed_login_attempts'] = 0;
+}
+
+function display_forgot_password_link() {
+    if (isset($_SESSION['failed_login_attempts']) && $_SESSION['failed_login_attempts'] >= 2) {
+        echo '<a href="forgot.php?forgot=' . uniqid(true) . '">Forgot Password</a>';
+    }
+}
+
+
 function login_user($username, $password) {
     global $connection;
 
