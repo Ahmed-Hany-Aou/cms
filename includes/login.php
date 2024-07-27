@@ -1,7 +1,8 @@
-<?php include "db.php"; ?>
-<?php session_start(); ?>
-
 <?php
+session_start();
+include "db.php";
+include "functions.php"; // Ensure this is included to use utility functions
+
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -13,9 +14,9 @@ if (isset($_POST['login'])) {
     // Query the user by username
     $query = "SELECT * FROM users WHERE username = '{$username}'";
     $select_user_query = mysqli_query($connection, $query);
-    
+
     if (!$select_user_query) {
-        die("Query Failed" . mysqli_error($connection));
+        die("Query Failed: " . mysqli_error($connection));
     }
 
     // Fetch the user data
@@ -47,7 +48,6 @@ if (isset($_POST['login'])) {
 }
 ?>
 
-<!-- HTML code for the login form -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,14 +58,22 @@ if (isset($_POST['login'])) {
 </head>
 <body>
     <div class="container">
-        <form action="login.php" method="post">
+        <h1>Login</h1>
+        <form action="login.php" method="post" id="login-form" autocomplete="on">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" name="username" class="form-control" placeholder="Enter Username" required>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" autocomplete="username" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" name="password" class="form-control" placeholder="Enter Password" required>
+                <div class="input-group">
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" autocomplete="current-password" required>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default toggle-password" type="button">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </button>
+                    </span>
+                </div>
             </div>
             <button type="submit" name="login" class="btn btn-primary">Login</button>
         </form>
@@ -75,5 +83,28 @@ if (isset($_POST['login'])) {
         }
         ?>
     </div>
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Toggle password visibility
+        document.querySelectorAll('.toggle-password').forEach(button => {
+            button.addEventListener('click', function() {
+                var input = this.parentElement.previousElementSibling;
+                var icon = this.querySelector('.glyphicon');
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove('glyphicon-eye-open');
+                    icon.classList.add('glyphicon-eye-close');
+                } else {
+                    input.type = "password";
+                    icon.classList.remove('glyphicon-eye-close');
+                    icon.classList.add('glyphicon-eye-open');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

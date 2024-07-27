@@ -4,13 +4,10 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 include("db.php");
 
-
-
 function escape($string){
     global $connection;
     return mysqli_real_escape_string($connection, trim($string));
 }
-
 
 function online_users() {
     global $connection;
@@ -45,7 +42,6 @@ if (isset($_GET['onlineusers'])) {
     online_users();
 }
 
-////////////////////////////////////////////////////////////////////////////////
 function redirect($location) {
     header("Location: " . $location);
     exit;
@@ -98,14 +94,12 @@ function deleteCategories() {
     }
 }
 
-function deleteposts() {
+function deleteposts($post_id) {
     global $connection;
-    if (isset($_GET['delete'])) {
-        $the_post_id = $_GET['delete'];
-        $query = "DELETE FROM posts WHERE post_id = {$the_post_id}";
-        $delete_query = mysqli_query($connection, $query);
-        header("Location: posts.php");
-    }
+    $query = "DELETE FROM posts WHERE post_id = {$post_id}";
+    $delete_query = mysqli_query($connection, $query);
+    confirm_Connection($delete_query);
+    header("Location: posts.php");
 }
 
 function deleteComment($comment_id) {
@@ -163,6 +157,47 @@ function show_comment($the_post_id) {
         }
     } else {
         echo "<p>No comments yet.</p>";
+    }
+}
+
+function is_admin($username=''){
+    global $connection;
+    $query = "SELECT user_role FROM users WHERE username = '$username'";
+    $result = mysqli_query($connection, $query);
+    confirm_Connection($result);
+    $row = mysqli_fetch_assoc($result);
+    if($row['user_role']=='admin'){
+        return true;
+        }else{
+            return false;
+    }
+}
+
+function username_exists($username){
+    global $connection;
+    $query = "SELECT username FROM users WHERE username = '$username'";
+    $result= mysqli_query($connection,$query);
+    confirm_Connection($result);
+
+    if(mysqli_num_rows($result)>0){
+        return true;
+
+    } else {
+        return false;
+    }
+}
+
+function email_exists($email){
+    global $connection;
+    $query = "SELECT user_email FROM users WHERE user_email = '$email'";
+    $result= mysqli_query($connection,$query);
+    confirm_Connection($result);
+
+    if(mysqli_num_rows($result)>0){
+        return true;
+
+    } else {
+        return false;
     }
 }
 ?>

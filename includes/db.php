@@ -1,5 +1,6 @@
+<?php ob_start(); ?>
 <?php
-$connection=mysqli_connect('localhost','root','','cms');
+$connection=mysqli_connect('localhost','root','','cms_2');
 
 
 /*if($connection){
