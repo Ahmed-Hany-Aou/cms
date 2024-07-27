@@ -1,4 +1,4 @@
-<?php include("functions.php");?>
+<?php include("functions.php"); ?>
 
 <?php
 if (ifItIsMethod('post')) {
@@ -60,8 +60,8 @@ if (ifItIsMethod('post')) {
 
                 <div class="form-group">
                     <button class="btn btn-primary" name="login" type="submit">Submit</button>
+                    </span>
                 </div>
-
                 <div class="form-group">
                     <?php display_forgot_password_link(); ?>
                 </div>
@@ -74,14 +74,14 @@ if (ifItIsMethod('post')) {
     <div class="well">
         <?php 
         $query = "SELECT * FROM categories";
-        $select_categories_sidebar = mysqli_query($connection, $query);         
+        $select_categories_sidebar = mysqli_query($connection,$query);         
         ?>
         <h4>Blog Categories</h4>
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled">
                     <?php 
-                    while($row = mysqli_fetch_assoc($select_categories_sidebar)) {
+                    while($row = mysqli_fetch_assoc($select_categories_sidebar )) {
                         $cat_title = $row['cat_title'];
                         $id = $row['id'];
                         echo "<li><a href='category.php?category=$id'>{$cat_title}</a></li>";

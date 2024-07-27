@@ -4,6 +4,46 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 include("db.php");
 
+// Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+// Load Composer's autoloader
+require 'vendor/autoload.php';
+
+// Function to send an email using Mailtrap
+function sendMail($to, $subject, $body) {
+    $mail = new PHPMailer(true);
+    try {
+        // Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     // Enable verbose debug output
+        $mail->isSMTP();                                           // Send using SMTP
+        $mail->Host       = 'sandbox.smtp.mailtrap.io';            // Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                  // Enable SMTP authentication
+        $mail->Username   = '3787032f27f785';                      // SMTP username
+        $mail->Password   = '3373c13c1f7b4e';                      // SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;        // Enable TLS encryption
+        $mail->Port       = 2525;                                  // TCP port to connect to
+
+        // Recipients
+        $mail->setFrom('from@example.com', 'Mailer');
+        $mail->addAddress($to);                                    // Add a recipient
+
+        // Content
+        $mail->isHTML(true);                                       // Set email format to HTML
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
+        $mail->AltBody = strip_tags($body);
+
+        $mail->send();
+        echo 'Message has been sent';
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+}
+
+// Function to track failed login attempts
 function track_failed_login_attempts() {
     if (!isset($_SESSION['failed_login_attempts'])) {
         $_SESSION['failed_login_attempts'] = 0;
@@ -11,17 +51,19 @@ function track_failed_login_attempts() {
     $_SESSION['failed_login_attempts']++;
 }
 
+// Function to reset failed login attempts
 function reset_failed_login_attempts() {
     $_SESSION['failed_login_attempts'] = 0;
 }
 
+// Function to display forgot password link
 function display_forgot_password_link() {
     if (isset($_SESSION['failed_login_attempts']) && $_SESSION['failed_login_attempts'] >= 2) {
         echo '<a href="forgot.php?forgot=' . uniqid(true) . '">Forgot Password</a>';
     }
 }
 
-
+// Function to handle user login
 function login_user($username, $password) {
     global $connection;
 
@@ -53,17 +95,19 @@ function login_user($username, $password) {
         $_SESSION['lastname'] = $db_user_lastname;
         $_SESSION['user_role'] = $db_user_role;
 
-        redirect("/dashboard/demo/CMS_TEMPLATE/admin/index.php"); // Updated redirect URL
+        redirect("/dashboard/demo/CMS_TEMPLATE/admin/index.php");
     } else {
         return false;
     }
 }
 
+// Function to redirect to a specified location
 function redirect($location) {
     header("Location:" . $location);
     exit;
 }
 
+// Function to check request method
 function ifItIsMethod($method = null) {
     if ($_SERVER['REQUEST_METHOD'] == strtoupper($method)) {
         return true;
@@ -71,6 +115,7 @@ function ifItIsMethod($method = null) {
     return false;
 }
 
+// Function to check if user is logged in
 function isLoggedIn() {
     if (isset($_SESSION['user_role'])) {
         return true;
@@ -78,17 +123,20 @@ function isLoggedIn() {
     return false;
 }
 
+// Function to check if user is logged in and redirect
 function checkIfUserIsLoggedInAndRedirect($redirectLocation = null) {
     if (isLoggedIn()) {
         redirect($redirectLocation);
     }
 }
 
+// Function to escape a string
 function escape($string) {
     global $connection;
     return mysqli_real_escape_string($connection, trim($string));
 }
 
+// Function to handle online users
 function online_users() {
     global $connection;
 
@@ -117,6 +165,7 @@ if (isset($_GET['onlineusers'])) {
     online_users();
 }
 
+// Function to confirm connection
 function confirm_Connection($result) {
     global $connection;
     if (!$result) {
@@ -124,6 +173,7 @@ function confirm_Connection($result) {
     }
 }
 
+// Function to insert categories
 function insert_categories() {
     global $connection;
     if (isset($_POST['submit'])) {
@@ -138,6 +188,7 @@ function insert_categories() {
     }
 }
 
+// Function to find all categories
 function findALLCategories() {
     global $connection;
     $query = 'SELECT * FROM categories';
@@ -154,6 +205,7 @@ function findALLCategories() {
     }
 }
 
+// Function to delete categories
 function deleteCategories() {
     global $connection;
     if (isset($_GET['delete'])) {
@@ -164,6 +216,7 @@ function deleteCategories() {
     }
 }
 
+// Function to delete posts
 function deleteposts($post_id) {
     global $connection;
     $query = "DELETE FROM posts WHERE post_id = {$post_id}";
@@ -172,6 +225,7 @@ function deleteposts($post_id) {
     header("Location: posts.php");
 }
 
+// Function to delete comments
 function deleteComment($comment_id) {
     global $connection;
     $query = "DELETE FROM comments WHERE comment_id = {$comment_id}";
@@ -181,6 +235,7 @@ function deleteComment($comment_id) {
     exit();
 }
 
+// Function to approve comments
 function approveComment($comment_id) {
     global $connection;
     $query = "UPDATE comments SET comment_status = 'approved' WHERE comment_id = {$comment_id}";
@@ -190,6 +245,7 @@ function approveComment($comment_id) {
     exit();
 }
 
+// Function to unapprove comments
 function unapproveComment($comment_id) {
     global $connection;
     $query = "UPDATE comments SET comment_status = 'unapproved' WHERE comment_id = {$comment_id}";
@@ -199,6 +255,7 @@ function unapproveComment($comment_id) {
     exit();
 }
 
+// Function to show comments
 function show_comment($the_post_id) {
     global $connection;
     $query = "SELECT * FROM comments WHERE comment_post_id = {$the_post_id} AND comment_status = 'approved' ORDER BY comment_id DESC";
@@ -230,6 +287,7 @@ function show_comment($the_post_id) {
     }
 }
 
+// Function to check if user is admin
 function is_admin($username = '') {
     global $connection;
     $query = "SELECT user_role FROM users WHERE username = '$username'";
@@ -243,6 +301,7 @@ function is_admin($username = '') {
     }
 }
 
+// Function to check if username exists
 function username_exists($username) {
     global $connection;
     $query = "SELECT username FROM users WHERE username = '$username'";
@@ -256,6 +315,7 @@ function username_exists($username) {
     }
 }
 
+// Function to check if email exists
 function email_exists($email) {
     global $connection;
     $query = "SELECT user_email FROM users WHERE user_email = '$email'";

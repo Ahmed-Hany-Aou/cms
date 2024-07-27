@@ -10,7 +10,10 @@ checkIfUserIsLoggedInAndRedirect('/dashboard/demo/CMS_TEMPLATE/admin/index.php')
 if(ifItIsMethod('post')) {
     if(isset($_POST['username']) && isset($_POST['password'])) {
         // Log in the user
-        login_user($_POST['username'], $_POST['password']);
+        if (!login_user($_POST['username'], $_POST['password'])) {
+            // Login failed, increment failed login attempts
+            track_failed_login_attempts();
+        }
     } else {
         // Redirect to admin page if POST data is not set
         redirect('/dashboard/demo/CMS_TEMPLATE/admin/index.php');
