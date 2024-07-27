@@ -17,35 +17,6 @@
         <!-- /.input-group -->
     </div>
 
-    <!-- Login -->
-    <div class="well">
-        <?php if(isset($_SESSION['user_role'])): ?>
-            <h4>Logged in as <?php echo $_SESSION['username']; ?></h4>
-            <a href="includes/logout.php" class="btn btn-primary">Logout</a>
-        <?php else: ?>
-            <h4>Login</h4>
-            <form action="includes/login.php" method="post" id="login-form">
-                <div class="form-group">
-                    <input name="username" type="text" class="form-control" placeholder="Enter your username" autocomplete="username" required>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <input name="password" type="password" class="form-control" placeholder="Enter your password" autocomplete="current-password" required>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default toggle-password" type="button">
-                                <span class="glyphicon glyphicon-eye-open"></span>
-                            </button>
-                        </span>
-                    </div>
-                </div>
-                <button name="login" class="btn btn-default" type="submit">
-                    <span class="glyphicon glyphicon-log-in"></span> Login
-                </button>
-            </form>
-        <?php endif; ?>
-        <!-- /.input-group -->
-    </div>
-
     <!-- Blog Categories Well -->
     <div class="well">
         <?php

@@ -4,7 +4,69 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 include("db.php");
 
-function escape($string){
+function login_user($username, $password) {
+    global $connection;
+
+    $username = trim($username);
+    $password = trim($password);
+
+    $username = mysqli_real_escape_string($connection, $username);
+    $password = mysqli_real_escape_string($connection, $password);
+
+    $query = "SELECT * FROM users WHERE username = '{$username}'";
+    $select_user_query = mysqli_query($connection, $query);
+
+    if (!$select_user_query) {
+        die("QUERY FAILED" . mysqli_error($connection));
+    }
+
+    while ($row = mysqli_fetch_array($select_user_query)) {
+        $db_user_id = $row['user_id'];
+        $db_username = $row['username'];
+        $db_user_password = $row['user_password'];
+        $db_user_firstname = $row['user_firstname'];
+        $db_user_lastname = $row['user_lastname'];
+        $db_user_role = $row['user_role'];
+    }
+
+    if (password_verify($password, $db_user_password)) {
+        $_SESSION['username'] = $db_username;
+        $_SESSION['firstname'] = $db_user_firstname;
+        $_SESSION['lastname'] = $db_user_lastname;
+        $_SESSION['user_role'] = $db_user_role;
+
+        redirect("/dashboard/demo/CMS_TEMPLATE/admin/index.php"); // Updated redirect URL
+    } else {
+        return false;
+    }
+}
+
+function redirect($location) {
+    header("Location:" . $location);
+    exit;
+}
+
+function ifItIsMethod($method = null) {
+    if ($_SERVER['REQUEST_METHOD'] == strtoupper($method)) {
+        return true;
+    }
+    return false;
+}
+
+function isLoggedIn() {
+    if (isset($_SESSION['user_role'])) {
+        return true;
+    }
+    return false;
+}
+
+function checkIfUserIsLoggedInAndRedirect($redirectLocation = null) {
+    if (isLoggedIn()) {
+        redirect($redirectLocation);
+    }
+}
+
+function escape($string) {
     global $connection;
     return mysqli_real_escape_string($connection, trim($string));
 }
@@ -17,34 +79,24 @@ function online_users() {
     $time_out_in_seconds = 20;
     $time_out = $time - $time_out_in_seconds;
 
-    // Check if the session already exists in the database
     $query = "SELECT * FROM users_online WHERE session = '$session'";
     $send_query = mysqli_query($connection, $query);
     $count = mysqli_num_rows($send_query);
 
-    // If no session exists, insert a new session record
     if ($count == NULL) {
         mysqli_query($connection, "INSERT INTO users_online(session, time) VALUES('$session', '$time')");
     } else {
-        // If session exists, update the existing session record
         mysqli_query($connection, "UPDATE users_online SET time = '$time' WHERE session = '$session'");
     }
 
-    // Query to count the number of active users (sessions updated within the last 60 seconds)
     $users_online_query = mysqli_query($connection, "SELECT * FROM users_online WHERE time > '$time_out'");
     $count_user = mysqli_num_rows($users_online_query);
 
-    // Return the number of online users
     echo $count_user;
 }
 
 if (isset($_GET['onlineusers'])) {
     online_users();
-}
-
-function redirect($location) {
-    header("Location: " . $location);
-    exit;
 }
 
 function confirm_Connection($result) {
@@ -160,42 +212,40 @@ function show_comment($the_post_id) {
     }
 }
 
-function is_admin($username=''){
+function is_admin($username = '') {
     global $connection;
     $query = "SELECT user_role FROM users WHERE username = '$username'";
     $result = mysqli_query($connection, $query);
     confirm_Connection($result);
     $row = mysqli_fetch_assoc($result);
-    if($row['user_role']=='admin'){
+    if ($row['user_role'] == 'admin') {
         return true;
-        }else{
-            return false;
-    }
-}
-
-function username_exists($username){
-    global $connection;
-    $query = "SELECT username FROM users WHERE username = '$username'";
-    $result= mysqli_query($connection,$query);
-    confirm_Connection($result);
-
-    if(mysqli_num_rows($result)>0){
-        return true;
-
     } else {
         return false;
     }
 }
 
-function email_exists($email){
+function username_exists($username) {
     global $connection;
-    $query = "SELECT user_email FROM users WHERE user_email = '$email'";
-    $result= mysqli_query($connection,$query);
+    $query = "SELECT username FROM users WHERE username = '$username'";
+    $result = mysqli_query($connection, $query);
     confirm_Connection($result);
 
-    if(mysqli_num_rows($result)>0){
+    if (mysqli_num_rows($result) > 0) {
         return true;
+    } else {
+        return false;
+    }
+}
 
+function email_exists($email) {
+    global $connection;
+    $query = "SELECT user_email FROM users WHERE user_email = '$email'";
+    $result = mysqli_query($connection, $query);
+    confirm_Connection($result);
+
+    if (mysqli_num_rows($result) > 0) {
+        return true;
     } else {
         return false;
     }
