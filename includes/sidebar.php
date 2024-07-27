@@ -24,12 +24,19 @@
             <a href="includes/logout.php" class="btn btn-primary">Logout</a>
         <?php else: ?>
             <h4>Login</h4>
-            <form action="includes/login.php" method="post">
+            <form action="includes/login.php" method="post" id="login-form">
                 <div class="form-group">
-                    <input name="username" type="text" class="form-control" placeholder="Enter your username">
+                    <input name="username" type="text" class="form-control" placeholder="Enter your username" autocomplete="username" required>
                 </div>
                 <div class="form-group">
-                    <input name="password" type="password" class="form-control" placeholder="Enter your password">
+                    <div class="input-group">
+                        <input name="password" type="password" class="form-control" placeholder="Enter your password" autocomplete="current-password" required>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default toggle-password" type="button">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                        </span>
+                    </div>
                 </div>
                 <button name="login" class="btn btn-default" type="submit">
                     <span class="glyphicon glyphicon-log-in"></span> Login
@@ -70,3 +77,26 @@
     <!-- Side Widget Well -->
     <?php include 'includes/widget.php' ?>
 </div>
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function() {
+            var input = this.parentElement.previousElementSibling;
+            var icon = this.querySelector('.glyphicon');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('glyphicon-eye-open');
+                icon.classList.add('glyphicon-eye-close');
+            } else {
+                input.type = "password";
+                icon.classList.remove('glyphicon-eye-close');
+                icon.classList.add('glyphicon-eye-open');
+            }
+        });
+    });
+</script>

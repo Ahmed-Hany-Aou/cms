@@ -51,19 +51,19 @@ if (isset($_POST["submit"])) {
                 <div class="col-xs-6 col-xs-offset-3">
                     <div class="form-wrap">
                         <h1>Register</h1>
-                        <form role="form" action="registration.php" method="post" id="registration-form" autocomplete="off">
+                        <form role="form" action="registration.php" method="post" id="registration-form" autocomplete="on">
                             <div class="form-group">
                                 <label for="username" class="sr-only">Username</label>
-                                <input type="text" name="username" id="username" class="form-control" placeholder="Enter Desired Username" minlength="5" required>
+                                <input type="text" name="username" id="username" class="form-control" placeholder="Enter Desired Username" minlength="5" autocomplete="username" required>
                             </div>
                             <div class="form-group">
                                 <label for="email" class="sr-only">Email</label>
-                                <input type="email" name="email" id="email" class="form-control" placeholder="somebody@example.com" required>
+                                <input type="email" name="email" id="email" class="form-control" placeholder="somebody@example.com" autocomplete="email" required>
                             </div>
                             <div class="form-group">
                                 <label for="password" class="sr-only">Password</label>
                                 <div class="input-group">
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="Password" minlength="8" required>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Password" minlength="8" autocomplete="new-password" required>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default toggle-password" type="button">
                                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -74,7 +74,7 @@ if (isset($_POST["submit"])) {
                             <div class="form-group">
                                 <label for="confirm_password" class="sr-only">Confirm Password</label>
                                 <div class="input-group">
-                                    <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm Password" minlength="8" required>
+                                    <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm Password" minlength="8" autocomplete="new-password" required>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default toggle-password" type="button">
                                             <span class="glyphicon glyphicon-eye-open"></span>
