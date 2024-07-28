@@ -10,7 +10,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 // Load Composer's autoloader
-require 'vendor/autoload.php';
+//require './vendor/autoload.php';//// iam in doubt with tis function ---check with tarek
 
 // Function to send an email using Mailtrap
 function sendMail($to, $subject, $body) {
@@ -24,7 +24,9 @@ function sendMail($to, $subject, $body) {
         $mail->Username   = '3787032f27f785';                      // SMTP username
         $mail->Password   = '3373c13c1f7b4e';                      // SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;        // Enable TLS encryption
-        $mail->Port       = 2525;                                  // TCP port to connect to
+        $mail->Port       = 2525; 
+        $mail->CharSet    = 'UTF-8';                          // from video no 299 section 40 -- i cant try it because mailtrap is not working at current time
+                                      
 
         // Recipients
         $mail->setFrom('from@example.com', 'Mailer');
@@ -95,11 +97,12 @@ function login_user($username, $password) {
         $_SESSION['lastname'] = $db_user_lastname;
         $_SESSION['user_role'] = $db_user_role;
 
-        redirect("/dashboard/demo/CMS_TEMPLATE/admin/index.php");
+        redirect("/dashboard/demo/CMS_TEMPLATE/admin/index.php"); // Updated redirect URL
     } else {
         return false;
     }
 }
+
 
 // Function to redirect to a specified location
 function redirect($location) {
